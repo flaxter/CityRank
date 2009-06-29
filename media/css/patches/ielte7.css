@@ -1,0 +1,31 @@
+@charset "UTF-8";
+/**
+ * "Yet Another Multicolumn Layout" - (X)HTML/CSS Framework
+ *
+ * (en) IE-Patch stylesheet for YAML standard layout (3 columns without column dividers)
+ *
+ * @copyright       Copyright 2005-2009, Dirk Jesse
+ * @license         CC-A 2.0 (http://creativecommons.org/licenses/by/2.0/),
+ *                  YAML-C (http://www.yaml.de/en/license/license-conditions.html)
+ * @link            http://www.yaml.de
+ * @package         yaml
+ * @version         3.1
+ * @revision        $Revision: 343 $
+ * @lastmodified    $Date: 2009-01-19 23:41:32 +0100 (Mo, 19. Jan 2009) $
+ */
+
+/* Layout independent adjustments ----------------------------------- */
+@import url(../../yaml/core/iehacks.css);
+
+/* Layout-dependent adjustments --------------------------------------- */
+@media screen, projection
+{
+#main #col3 #ranking-tool .yui-slider-thumb {left: 0 !important;}
+#main #col3 #ranking-tool .yui-slider-thumb img {margin-left: 0;}
+
+#main .yui-dt-paginator .yui-pg-next .sign { padding-right: 2px;}
+
+#main h1.style1 {margin-bottom: 0;}
+#user .input-text,
+#user .input-password {margin-bottom: 6px;}
+}

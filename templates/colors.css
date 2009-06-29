@@ -1,0 +1,13 @@
+@charset "UTF-8";
+/**
+ * color definitions for the different indicators of cityrank.ch
+ * a dynamic version of page can be found at 
+ * http://www.cityrank.ch/media/css/screen/colors.css -->
+ * download that and place it in media/css/screen on the static apache server 
+ **/
+
+@media all
+{
+{% for row in data %}
+	{% if row.datasource %} .indicator_color{{ row.datasource.id }} { background-color: #{{ row.color }}; } {% endif %} {% endfor %}
+}

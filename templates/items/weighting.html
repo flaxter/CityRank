@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+{% block ranking_active %} class="active" {% endblock %}
+
+{% block header_scripts %}
+   {% include "includes/slider.html" %} 
+   {% include "includes/yuitable.html" %}  
+
+<!--css--> 
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/logger/assets/skins/sam/logger.css"> 
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/profilerviewer/assets/skins/sam/profilerviewer.css"> 
+<!--js--> 
+
+	<script type="text/javascript">
+		{% block vizinit %} 
+			var table, json_data;
+			var ranking_id = {{ ranking_id }};
+
+			YAHOO.util.Event.addListener(window, "load", function() {
+/*
+				YAHOO.example.Basic = new function() {
+				    YAHOO.util.Event.addListener(YAHOO.util.Dom.get("loglink"), "click", function(e) {
+					YAHOO.util.Event.stopEvent(e);
+					YAHOO.log("This is a simple log message.");
+				    });
+
+				    // Put a LogReader on your page
+				    this.myLogReader = new YAHOO.widget.LogReader();
+				};
+<!--<p><a href="#" id="loglink">Click here</a> to log a simple message.</p> -->
+*/
+
+				/* yahoo code */
+				var columnDefs = [{key:"Item", sortable:true, formatter:"itemFormatter"}, {key:"Rank", sortable:true}, /*{key:"Previous", sortable:true},*/
+					{% for source in sources %} 
+						{key: "rank{{ source.id }}", label: "{{ source.shortname }}", sortable:true} {% if not forloop.last %} , {% endif %}
+					{% endfor %}
+				];
+
+				var dataSource = new YAHOO.util.XHRDataSource("/ranking/json/?version=" + CITYRANK_DATA_VERSION);
+
+				dataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+/*				dataSource.connXhrMode = "queueRequests";*/ 
+				
+				rankFields = ['Item', 'Rank', 'index', 'Previous', {% for source in sources %} 'rank{{ source.id }}' {% if not forloop.last %} , {% endif %} {% endfor %}];
+/*				fields = ['Item', 'Rank'] + rankFields;
+				fieldsWithPrevious = ['Item', 'Rank', 'Previous'] + rankFields;*/
+				
+				dataSource.responseSchema = { resultsList: "Result", fields: rankFields };
+
+                                YAHOO.widget.DataTable.Formatter.itemFormatter =
+                                        function(elCell, oRecord, oColumn, item) {
+                                                var rank = oRecord.getData('index');
+                                                elCell.innerHTML = "<span class=\"rank\">" + rank + ". </span><a href=\"/items/" + item + "\" class=\"item\">" + item + "</a>";
+                                        };
+				var table = new YAHOO.widget.DataTable("ranking-tool", columnDefs, dataSource, {/*caption:"",*/ initialRequest: ""});
+
+
+				// Enable row highlighting 
+				table.subscribe("rowMouseoverEvent", table.onEventHighlightRow); 
+				table.subscribe("rowMouseoutEvent", table.onEventUnhighlightRow); 
+/*
+				var callback = new function() {
+					table.set("sortedBy", null); 
+					table.onDataReturnAppendRows.apply(table,arguments); 
+				};
+				var callback1 = { 
+					success : callback, 
+					failure : callback, 
+					scope : table 
+				}; */
+				var dataCallback = function(request, response, payload) {
+					/*if(response.results['fields'][3] == 'Previous')
+						dataSource.responseSchema = { resultsList: "Result", fields: fieldsWithPrevious };
+					else
+						dataSource.responseSchema = { resultsList: "Result", fields: fields };*/
+						
+					table.onDataReturnInitializeTable(request, response, payload);
+/*					YAHOO.util.Dom.addClass(table.getTrEl(0), 'ranked-first');
+					YAHOO.util.Dom.addClass(table.getTrEl(1), 'ranked-second');
+					YAHOO.util.Dom.addClass(table.getTrEl(2), 'ranked-third');*/
+
+					$("#ranking_icon").attr("src", "/ranking" + ranking_id + ".png?rnd=" + new Date().getTime());
+					$("#status").html(""); 
+					/*$("#weighting-viz").fadeOut(10);
+					$("#weighting-viz2").fadeIn(10);*/
+					ranking_id += 1;
+				}
+				
+				var newCallback = {
+					success: dataCallback, 
+					failure: function() { 
+						YAHOO.log("Polling failure", "error"); 
+					}, 
+					scope: table 
+				};
+				{% for source, weight in source_weights.items %}
+					var weight{{ source.id }} = {{ weight }};
+					var oldWeight{{ source.id }} = {{ weight }};
+				{% endfor %}
+
+				dataSource.sendRequest("&weights=" + {% for source in sources %} {{ source.id }} + "_" + weight{{ source.id }} + "," + {% endfor %} "&rnd=" + new Date().getTime(), newCallback); 
+				table.setAttributeConfig("MSG_EMPTY", { value: '<h2>No Indicators Selected!</h2><p>Instructions: use the <a href="/indicators/">Indicators</a> page to select indicators and begin building your ranking.</p> <p>When you\'re satifisfied, go to the <a href="/ranking/">My Ranking</a> page to assign weights to each of the indicators and finish building your ranking.</p><p><a href="/explain/">How does it work?</a></p>' });
+
+				/* use jQuery to append an extra row to the table header (thead) */
+				$('div#ranking-tool table thead').append('<tr><td colspan=2 id=share-icon class=\"slider-td\"><img src="/ranking{{ ranking_id }}.png" id="ranking_icon" /><br/><span id="status"></span><a href="/ranking/submit/" class=\"button01\"><span class=\"button-left-side\"></span><span class=\"button-middle\">Share your weighting</span><span class=\"button-right-side\"></span></a></td> \
+{% for source in sources %} \
+<td class="slider-td"> \
+<span class="yui-dt-label"> \
+<div id=header-{{ source.id }} class=\"indicator_color{{ source.id }} \"> \
+	<div class="slider">  \
+		<div id="slider-bg-{{ source.id }}" class="item-slider-bg" tabindex="-1" title="Slider">  \
+			<div id="slider-thumb-{{ source.id }}" class="yui-slider-thumb"> \
+				<img src="{{ MEDIA_URL }}knob.png"> \
+			</div> \
+		</div> \
+		<div class="slider-box-new"><input autocomplete="off" id="slider-converted-value-{{ source.id }}" class="slider-converted-value" type="text" value=' + weight{{ source.id }} + ' size="4" maxlength="4" /> \
+		</div> \
+	</div> \
+</div> \
+</span> \
+</td> \
+{% endfor %} \
+</tr>');
+
+				/* add a weighting slider for each ranking to the new row */
+				var top = 0;
+				var bottom = 140;
+				var height = bottom - top;
+
+				function wt_to_px(weight) {
+					return (height / 9) * (10 - weight);
+				}
+				function px_to_wt(px) {
+					return Math.round((-9 /bottom) * px + 10); 
+				}
+
+				{% for source in sources %}
+					slider{{ source.id }} = YAHOO.widget.Slider.getVertSlider("slider-bg-{{ source.id }}", "slider-thumb-{{ source.id }}", top, bottom, 5); 
+					slider{{ source.id }}.setValue(wt_to_px(weight{{ source.id }}), false); 
+					/*alert("setValue " + (wt_to_px(weight{{ source.id }})));*/
+
+					slider{{ source.id }}.subscribe('slideEnd', function () { 
+						value = slider{{ source.id }}.getValue();
+						/*alert(value + " = " + px_to_wt(value));*/
+						weight{{ source.id }} = px_to_wt(value); /*Math.round(10 - value / 5, 1);*/
+						var fld = YAHOO.util.Dom.get("slider-converted-value-{{ source.id }}");
+						updateWeighting(value);
+					}); 
+					slider{{ source.id }}.subscribe("change", function(offsetFromStart) {
+						var fld = YAHOO.util.Dom.get("slider-converted-value-{{ source.id }}");
+						var actualValue = slider{{ source.id }}.getValue();
+
+						fld.value = px_to_wt(actualValue); /*(10 - actualValue / 5);*/
+						weight{{ source.id }} = fld.value;
+
+						// Update the title attribute on the background.  This helps assistive
+						// technology to communicate the state change -- FIX THIS!
+						YAHOO.util.Dom.get("slider-box").title = "slider value = " + actualValue;
+					});
+				{% endfor %} 
+
+				function updateWeighting(value) {
+					updated = false;
+					{% for source in sources %}
+						if(weight{{ source.id }} != oldWeight{{ source.id }}) {
+							updated = true;
+							oldWeight{{ source.id }} = weight{{ source.id }};
+						}
+					{% endfor %}
+
+					if(updated) {
+						dataSource.sendRequest("&weights=" + {% for source in sources %} {{ source.id }} + "_" + weight{{ source.id }} + "," + {% endfor %} "&rnd=" + new Date().getTime(), newCallback); 
+						$("#status").html("<img src=\"{{ MEDIA_URL }}loading.gif\" alt=\"loading...\" id=\"loading-icon\"/>");
+					}
+				}/*
+				function handleResponse(response) {
+					if (response.isError()) {
+						<!-- to be fixed; can't deploy with alerts! -->
+						alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+						return;
+					}
+					json_data = response.getDataTable();
+					drawAggregation();
+				}*/
+			});
+		{% endblock %}
+	</script>
+	{{ block.super }}
+{% endblock %}
+
+{% load icons %}
+
+{% block headingcol3 %}<h1>My Ranking</h1>{% endblock %}
+
+{% block main %}
+<p class="no-indent" id="instructions">Adjust the sliders to assign "importance" to each indicator. <a href="/indicators/">[add/remove indicators]</a>.  <em>1 = least important and 10 = most important</em></p>
+
+<!--
+<ul>
+<li><a href="/rankings/">Include more rankings?</a></li>
+<li><a href="/accounts/profile/">Your rankings</a></li>
+<li><a href="/gallery/">See the gallery of shared rankings</a></li>
+<li><a href="/ranking/submit/">Done? Share your weighting!</a></li>
+</ul>
+-->
+
+<div id="block_tools">
+<!-- <p id="weighting-viz"><img src="/ranking{{ ranking_id }}.png" id="ranking_icon" /></p> -->
+
+<!--
+<h2>Highlight the Rankings You'd Like To Include</h2> 
+<form>
+<select multiple size=7>
+{% for source in all_sources %}
+	<option value=source{{ source.id }} {% if source.aggregate %}SELECTED{% endif %}>{{ source.shortname }}</option>
+{% endfor %}
+</select>
+<br />
+<input type=submit value="Revert to Original">
+<input type=submit value="Update">
+</form>
+-->
+</div>
+
+<div class="yui-skin-sam">
+	<!-- <div id="status"></div>-->
+	<div id="ranking-tool" class="yui-skin-sam"></div>
+</div>
+
+
+{% endblock %}

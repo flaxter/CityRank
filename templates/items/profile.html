@@ -1,0 +1,23 @@
+{% extends "base_aggregation.html" %}
+{% block gallery_active %} class="active" {% endblock %}
+
+{% block headingcol3 %}<h1>{{ viewed_user }}'s profile</h1>{% endblock %}
+
+{% load date_diff %}
+
+{% block main %}
+{% if weightings %}
+	<h2>Saved Rankings</h2>
+	<div id="gallery">
+	<div id="tabs">
+	<div class="yui-content">
+	<ul>
+	{% for weighting in weightings %}
+		<li><div class="left-col"><a href="/gallery/{{ weighting.id }}"><img src="/media/ranking_icons/icon{{ weighting.id }}.png" /></a></div><div class="right-col"> <a href="/gallery/{{ weighting.id }}" class="title">{{ weighting.name }}</a> <em>{{ weighting.created|date_diff }}</em><br/>{{ weighting.description }} </div></li>
+	{% endfor %}
+	</ul>
+	</div>
+	</div>
+	</div>
+{% endif %}
+{% endblock %}

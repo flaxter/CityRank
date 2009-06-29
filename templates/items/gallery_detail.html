@@ -1,0 +1,139 @@
+{% extends "base_aggregation.html" %}
+{% block gallery_active %} class="active" {% endblock %}
+
+{% block header_scripts %}
+	{% include "includes/tabs.html" %}
+	{% include "includes/gmaps.html" %}
+        {% include "includes/yuitable.html" %}
+	{{ block.super }}
+{% endblock %}
+
+{% load date_diff %}
+
+{% block vizinit %}
+	google.load('visualization', '1', {'packages':['table', 'map']});
+	google.setOnLoadCallback(drawView);
+	var map;
+	var raw_data = {{ json_table|safe }};
+	var dataSource;
+
+	function drawView() {
+/*		var table = new google.visualization.Table(document.getElementById('table_div_rank'));
+		var json_data = new google.visualization.DataTable(raw_data, 0.5);
+		table.draw(json_data, {showRowNumber: true, allowHtml: true});*/
+
+		var columnDefs = [{key:"Item", sortable:true}, {key:"Rank", sortable:true},
+			{% for weighting in weightings %} 
+				{key: "rank{{ weighting.source.id }}", label: "{{ weighting.source.shortname }}", sortable:true}, 
+			{% endfor %} ];
+
+		dataSource = new YAHOO.util.DataSource(raw_data);
+		rankFields = ['Item', 'Rank', {% for weighting in weightings %} 'rank{{ weighting.source.id }}', {% endfor %}];
+		dataSource.responseSchema = { resultsList: "Result", fields: rankFields };
+
+		var table_new = new YAHOO.widget.DataTable("table_div_rank", columnDefs, dataSource, {/*caption:"",*/ initialRequest: ""});
+
+	}
+
+
+	function createMarker(map, icon, lat, long, item, rank) {
+		var point = new GLatLng(lat, long); 
+		var marker = new GMarker(point, {icon: icon} );
+
+		GEvent.addListener(marker, "click", function() {
+			var text = "<b><a href=\"/items/" + item + "\">" + item + "</a> ranks " + rank + "</b><br/>";
+			map.openInfoWindowHtml(point,text);
+		} );
+		return marker;
+	}
+
+	function drawGmap() {
+		if (GBrowserIsCompatible()) {
+			var map = new GMap2(document.getElementById("map"));
+			map.setUIToDefault();
+
+			var blueIcon = new GIcon(G_DEFAULT_ICON);
+			blueIcon.image = "{{ MEDIA_URL }}map/icons/iconb{{ rankMax }}.png";
+
+			map.setCenter(new GLatLng(20, 0), 2);
+			map.setUIToDefault();
+
+			var large = new GSize(10,17);
+			var small = new GSize(20,34);
+	    
+			var point = new Array(raw_data.Result.length);
+			var marker = new Array(raw_data.Result.length);
+			var embed_html = '<p><a href="http://www.itemrank.ch/gallery/{{ weighting.id }}">{{ weighting.name }}</a>: a ranking of items I created on <a href="http://www.itemrank.ch">ItemRank.ch</a></p>\n\n<table><tr><td>Rank</td><td>Item</td><td>Score</td></tr>\n';
+
+			for(var i = 0; i < raw_data.Result.length; i++) {
+				map.addOverlay(createMarker(map, blueIcon, raw_data.Result[i]['Latitude'], raw_data['Result'][i]['Longitude'], raw_data['Result'][i]['Item'], raw_data['Result'][i]['Rank']));
+				embed_html += "<tr><td>" + i + "</td><td>" + raw_data['Result'][i]['Item'] + "</td><td>" + raw_data['Result'][i]['Rank'] + "</td></tr>\n";
+			}
+			embed_html += "</table>\n";
+
+			var formatted = '<a href="http://www.itemrank.ch/gallery/{{ weighting.id }}">{{ weighting.name }}</a> is a ranking of items I created on <a href="http://www.itemrank.ch">ItemRank.ch</a> with these top 5: ';
+			var twitter = 'My @ItemRank is at http://itemrank.ch/{{ weighting.id }}. Top: ';
+			var top5 = '';
+
+			for(var i = 0; i < 4; i++) {
+				top5 += raw_data['Result'][i]['Item'] + ", "; 
+			}
+			top5 += raw_data['Result'][4]['Item'];
+
+			twitter += top5;
+			formatted += top5;
+
+			twitter = twitter.substr(0, 140 - 3);
+			twitter += "...";
+
+			$("#embed_textarea").val(embed_html);
+			$("#formatted_text").html(formatted);
+			$("#twitter_text").html(twitter);
+		}
+	}
+	google.setOnLoadCallback(drawGmap);
+
+	var myTabs = new YAHOO.widget.TabView("tabs");
+
+	{{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %} <a href="/gallery/">Gallery</a> {% include "includes/crumb.html" %} {{ weighting.name }} {% endblock %}
+
+{% block headingcol3 %}<h1><img src="/media/ranking_icons/icon{{ weighting.id }}.png" /> {{ weighting.name }}</h1>{% endblock %}
+
+{% block main %}
+<div class="yui-skin-sam">
+	<div id="tabs" class="yui-navset">
+		<ul class="yui-nav">
+			<li class="selected first"><a href="#tab1"><em>Ranking</em></a></li>
+			<li><a href="#tab3"><em>Map</em></a></li>
+			<li class="last"><a href="#tab3"><em>E-mail, share, embed</em></a></li>
+		</ul>            
+		<div class="yui-content">
+			<div>
+				<p>Created <em>{{ weighting.created|date_diff }}</em> by <a href="/accounts/profile/{{ weighting.creator.username }}">{{ weighting.creator.username }}</a></p>
+				<p>{{ weighting.description|safe }}</p>
+				<h2>Weighting:</h2>
+				<ul>
+					{% for w in weighting.weights.all %}
+					<li>{{ w.source }}: {{ w.weight }}</li>
+					{% endfor %}
+				</ul>
+				<div id="table_div_rank"></div>
+			</div>
+			<div><div id="map" style="width: 800px; height: 550px;"></div></div>
+			<div>
+				<p><strong>Embed ranking as HTML</strong><br />
+				<textarea cols=80 rows=10 id="embed_textarea"></textarea></p>
+				<p><strong>Link to this page: http://www.itemrank.ch/gallery/{{ weighting.id }}</strong><br />
+				<p>Copy this description into an e-mail or blog post:</p>
+				<blockquote id="formatted_text"></blockquote>
+				<p>For Twitter:</p>
+				<blockquote id="twitter_text"></blockquote>
+				</p>	
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

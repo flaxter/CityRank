@@ -1,0 +1,42 @@
+@charset "UTF-8";
+/**
+ * color definitions for the different indicators of cityrank.ch
+ * a dynamic version of page can be found at 
+ * http://www.cityrank.ch/media/css/screen/colors.css -->
+ * download that and place it in media/css/screen on the static apache server 
+ **/
+
+@media all
+{
+
+	 .indicator_color12 { background-color: #225466; }  
+	 .indicator_color27 { background-color: #A6F388; }  
+	 .indicator_color6 { background-color: #E10E67; }  
+	 .indicator_color14 { background-color: #3099DC; }  
+	 .indicator_color10 { background-color: #3C323C; }  
+	 .indicator_color5 { background-color: #DEF4BB; }  
+	 .indicator_color24 { background-color: #26B5A8; }  
+	 .indicator_color17 { background-color: #000000; }  
+	 .indicator_color16 { background-color: #FFFFB8; }  
+	 .indicator_color18 { background-color: #5EB900; }  
+	 .indicator_color15 { background-color: #FF530D; }  
+	 .indicator_color11 { background-color: #FF1B37; }  
+	 .indicator_color13 { background-color: #40140C; }  
+	 .indicator_color31 { background-color: #F2E988; }  
+	 .indicator_color41 { background-color: #CCC751; }  
+	 .indicator_color40 { background-color: #FC7940; }  
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+}

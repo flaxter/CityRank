@@ -1,0 +1,8 @@
+Thank you for creating an account on CityRank.ch <http://www.cityrank.ch>.
+
+Please follow this link to activate your account and begin ranking!
+
+http://www.cityrank.ch/accounts/activate/{{ activation_key }}
+
+Best,
+The CityRank Team

@@ -1,0 +1,138 @@
+{% extends "base_aggregation.html" %}
+{% block stats_active %} class="active" {% endblock %}
+
+{% block header_scripts %}
+	{% include "includes/tabs.html" %}
+	{% include "includes/gmaps.html" %}
+	{{ block.super }}
+{% endblock %}
+
+{% load misc %}
+
+{% block vizinit %}
+
+	google.load('visualization', '1', {'packages':['map', 'linechart']});
+	google.setOnLoadCallback(drawView);
+	var map, statsLabel;
+
+	function format_number(val) {
+		val += '';
+		x = val.split('.');
+		x1 = x[0];
+		x2 = x.length > 1 ? '.' + x[1] : '';
+		var rgx = /(\d+)(\d{3})/;
+		while (rgx.test(x1)) {
+			x1 = x1.replace(rgx, '$1' + ',' + '$2');
+		}
+		return x1 + x2;
+	}
+
+
+	function drawView() {
+		var raw_data = {{ json_table|safe }};
+
+		/* yahoo */
+		var columnDefs = raw_data.columns;
+		var dataSource = new YAHOO.util.DataSource(raw_data);
+		var rankFields = raw_data.columns;
+		dataSource.responseSchema = { resultsList: "Result", fields: rankFields };
+
+		YAHOO.widget.DataTable.Formatter.numberFormatter =
+			function(elCell, oRecord, oColumn, val) {
+				elCell.innerHTML = format_number(val);	
+			};
+
+                var table = new YAHOO.widget.DataTable("table_div_rank", columnDefs, dataSource);
+		statsLabel = columnDefs[1]['label'];
+
+		/* map */ 
+		var data = new google.visualization.DataTable({{ json_map|safe }}, 0.5);
+		var options = {'showTip': true, 'mapType': 'normal'};
+
+		var map = document.getElementById('map');
+		var mapviz = new google.visualization.Map(map);
+		mapviz.draw(data, options);
+
+		/* graph */
+		var json_graph_data = new google.visualization.DataTable({{ json_graph_table|safe }}, 0.5);
+		var chart = new google.visualization.LineChart(document.getElementById('scatter'))
+		chart.draw(json_graph_data, {width: 700, height: 550, title: 'First 25', titleX: 'Item', titleY: statsLabel, legend: 'none', pointSize: 3, reverseAxis: false });
+
+		drawGmap();
+
+	}
+
+	function drawGmap() {
+		if (GBrowserIsCompatible()) {
+			var map = new GMap2(document.getElementById("map"));
+			map.setUIToDefault();
+			map.setCenter(new GLatLng(20, 0), 2);
+
+			var blueIcon = new GIcon(G_DEFAULT_ICON);
+			var large = new GSize(10,17);
+			var small = new GSize(20,34);
+	    
+			{% for item, value in item_data %}
+			{
+				blueIcon.image = "{{ MEDIA_URL }}map/icons/iconb.png";
+				
+				{% comment %}
+				{% ifequal rankMax 26 %}
+					blueIcon.iconSize = large;
+				{% else %}
+					blueIcon.iconSize = small;
+				{% endifequal %} {% endcomment %}
+
+				markerOptions = { icon: blueIcon };
+
+				var html{{item.id}};
+				point = new GLatLng({{ item.lat }}, {{ item.long }});
+				
+				marker = new GMarker(point, markerOptions);
+				map.addOverlay(marker);
+
+				GEvent.addListener(marker, "click", function() {
+					value = {{ value }}
+					{% if decimals %}
+					value = value.toFixed({{ decimals }});
+					{% endif %}
+					value = format_number(value);
+						
+					title = "<b><a href=\"/items/{{ item.name|urlencode }}\">{{ item.name }}</a> - " + statsLabel + ": " + value + "</b><br/>";
+					map.openInfoWindowHtml(new GLatLng({{ item.lat }}, {{ item.long }}), title);
+				} );
+			}
+			{% endfor %}
+		}
+	}
+	google.setOnLoadCallback(drawGmap);
+
+	var myTabs = new YAHOO.widget.TabView("tabs");
+
+	{{ block.super }}
+{% endblock %}
+{% load listutil %}
+
+{% block breadcrumbs %} <a href="/stats/">Stats</a> {% include "includes/crumb.html" %} {{ datasource.name }} {% endblock %}
+
+{% block headingcol3 %}<h1>{{ datasource.name }}</h1>{% endblock %}
+
+{% block main %}
+<div class="yui-skin-sam">
+	<div id="tabs" class="yui-navset">
+		<ul class="yui-nav">
+			<li class="selected first"><a href="#tab1"><em>Overview</em></a></li>
+			<li><a href="#tab2"><em>Data</em></a></li>
+			<li><a href="#tab3"><em>Graph</em></a></li>
+			<li class="last"><a href="#tab4"><em>Map</em></a></li>
+		</ul>            
+		<div class="yui-content">
+			
+			<div><p>Source: <a href="{{ datasource.source }}">{{ datasource.source }}</a></p><p>{{ datasource.description|safe }}</p></div>
+			<div><div id="table_div_rank"></div></div>
+			<div id="scatter" style="width: 700px; height: 550px;"></div>
+			<div id="map" style="width: 800px; height: 550px;"></div>
+		</div>
+	</div>
+</div>
+{% endblock %}

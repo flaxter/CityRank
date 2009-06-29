@@ -1,0 +1,25 @@
+{% extends "base_2cols.html" %}
+
+{% block user_login %}{% endblock %}
+
+{% block headingcol3 %}<h1>Please Log In</h1>{% endblock %}
+
+{% block main %}
+	{% if form.errors %}
+		<p class="error">Sorry, that's not a valid username or password.</p>
+	{% endif %}
+
+	<form action="." method="post">
+		<p><label for="username">User name:</label>
+		<input type="text" name="username" value="" id="username"/></p>
+		<p><label for="password">Password:</label>
+		<input type="password" name="password" value="" id="password"/></p>
+
+		<p><label>&nbsp;</label><input type="submit" value="login" /></p>
+		<input type="hidden" name="next" value="{{ next|escape }}" />
+	</form>
+	<p>
+	<strong><a href="/accounts/register/">Register an account!</a></strong>
+	</p>
+	<em>Forum des 100 participants: use user name / password: suisse / romande</em>
+{% endblock %}

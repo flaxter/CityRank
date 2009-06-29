@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>{% block title %}CityRank.ch{% endblock %}</title>
+	<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAANpnmwXVLbQJgrWJhN453dRQr4EE5UCF0FuzYRJSZEye0mDu1ChTYp5IDJN0YyEWz4HYT9BCLeAjx3w"></script>
+	<script type="text/javascript">
+                google.load("jquery", "1.3.2");
+	
+		CITYRANK_DATA_VERSION = 0.001;
+/*		google.load("jqueryui", "1.7.0"); */
+	</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.7.0/build/yahoo-dom-event/yahoo-dom-event.js&2.7.0/build/connection/connection-min.js&2.7.0/build/datasource/datasource-min.js&2.7.0/build/element/element-min.js&2.7.0/build/paginator/paginator-min.js&2.7.0/build/dragdrop/dragdrop-min.js&2.7.0/build/datatable/datatable-min.js&2.7.0/build/slider/slider-min.js&2.7.0/build/tabview/tabview-min.js"></script>
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/tabview/assets/skins/sam/tabview.css" />
+
+	{% block header_scripts %}
+	{% endblock %}
+	<link href="{{ MEDIA_URL }}css/cityrank.css" rel="stylesheet" type="text/css"/>
+	<!--[if lte IE 7]>
+	<link href="{{ MEDIA_URL }}css/patches/ielte7.css" rel="stylesheet" type="text/css" />
+	<![endif]-->
+	<!--[if IE 7]>
+	<link href="{{ MEDIA_URL }}css/patches/ie7.css" rel="stylesheet" type="text/css" />
+	<![endif]-->
+	<!--[if lte IE 6]>
+	<link href="{{ MEDIA_URL }}css/patches/ielte6.css" rel="stylesheet" type="text/css" />
+	<style type="text/css">
+		img { behavior: url(http://www.cityrank.ch/media/css/patches/iepngfix.htc) }
+	</style>
+	<![endif]-->
+</head>
+
+{% block body_tag %}
+<body>
+{% endblock %}
+
+<div id="header">
+  {% block header %}
+  <div class="page_margins">
+    <div class="page">
+      <div id="topnav">
+        <!-- start: skip link navigation -->
+        <a class="skip" href="#navigation" title="skip link">skip to navigation</a><span class="hideme">.</span>
+        <a class="skip" href="#content" title="skip link">skip to content</a><span class="hideme">.</span>
+        <!-- end: skip link navigation -->
+      </div>
+	  {% block user_login %}
+      <div id="user">
+		{% if user.is_authenticated %}
+			<p class="welcome">Welcome, <a href="/accounts/profile/">{{ user.username }}</a>. <a href="/accounts/logout" class="logout">Logout</a></p>
+		{% else %}
+			<form action="/accounts/login/" method="post"><input type="text" name="username" class="input-text"/><input type="password" name="password" class="input-password"/><input type="submit" value="Login" class="login"/><input type="hidden" name="next" value="{{ next|escape }}" />
+      		<a href="/accounts/register" title="have no account yet? register a new account">register an account</a>
+      		</form>
+		{% endif %} 
+      </div>
+	  {% endblock %}
+      <h1 id="logo"><a href="/" title="cityrank.ch"><img src="{{ MEDIA_URL }}images/logo_cityrank_01.png" alt="cityrank.ch" class="noprint"/><img src="{{ MEDIA_URL }}images/logo_cityrank_02.png" alt="cityrank.ch" class="print"/></a></h1>
+      <!-- begin: main navigation #nav -->
+      <!-- skiplink anchor: navigation -->
+      <a id="navigation" name="navigation"></a>
+      <ul id="nav_main">      	
+		<li class="first"><a href="/" {% block home_active %}{% endblock %}>Home</a></li>
+		<li><a href="/items/" {% block items_active %}{% endblock %}>Items</a></li> 
+		<li><a href="/indicators/" {% block indicators_active %}{% endblock %}>Indicators</a></li>
+		<li><a href="/ranking/" {% block ranking_active %}{% endblock %}>My Ranking</a></li>
+		<li><a href="/gallery/" {% block gallery_active %}{% endblock %}>Gallery</a></li>
+		<li><a href="/stats/" {% block stats_active %}{% endblock %}>Stats</a></li>
+		<li><a href="/explain/" {% block explain_active %}{% endblock %}>How?</a></li>
+		<li><a href="/about/" {% block about_active %}{% endblock %}>About</a></li>
+		<li class="last"><a href="/learn/" {% block more_active %}{% endblock %}>Learn More</a></li>
+<!--		<li class="last"><a href="/contact/" {% block contact_active %}{% endblock %}>Contact</a></li>-->
+      </ul>
+	  <!-- end: main navigation -->
+    </div>
+  </div>
+  {% endblock %}
+</div>
+
+{% block content %}
+<!-- begin: main content area #main -->
+<div id="main" class="hidecol1">
+  <div class="page_margins">
+    <div class="page">
+
+      <!-- begin: #col3 static column -->
+      <div id="col3">
+        <div id="col3_content" class="clearfix"> <a id="content" name="content"></a>
+          <!-- skiplink anchor: Content -->
+          <div class="box100">
+		    <div id="breadcrumbs">{% block breadcrumbs %} {% endblock %}</div>		    
+		    <div class="heading1">{% block headingcol3 %} {% endblock %}</div>
+		  </div>
+		  <div class="box200">
+			{% block messages %} 
+				{% if messages %}
+				<ul>
+					{% for message in messages %}
+						<li>{{ message|safe }}</li>
+					{% endfor %}
+				</ul>
+				{% endif %}
+			{% endblock %}
+			{% block main %} {% endblock %}
+		  </div>
+        <div id="ie_clearing">&nbsp;</div>
+        <!-- End: IE Column Clearing -->
+      </div>
+      <!-- end: #col3 -->
+    </div>
+  </div>
+</div>
+<!-- end: #main -->
+{% endblock %}
+	
+<!-- begin: #footer -->
+<div id="footer">
+  <div class="page_margins">
+    <div class="page">
+
+<!-- forgive me for using images for the separators and not an li! I promise to fix it soon! -->
+
+      {% block footer %}<p class="copyright"><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a> 
+
+&nbsp;
+
+<span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/InteractiveResource" property="dc:title" rel="dc:type">CityRank.ch</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://ldm.epfl.ch" property="cc:attributionName" rel="cc:attributionURL">EPFL Media x Design Lab</a>, <a href="http://www.fondationpourgeneve.ch/">Fondation pour Gen&#232;ve</a>, and <a href="http://www.thinkstudio.com/">ThinkStudio</a>. 
+
+<img src="{{ MEDIA_URL }}images/bg_main_nav_a_01.png" alt="" /> 
+
+<a href="/contact/">Contact us</a>
+
+<img src="{{ MEDIA_URL }}images/bg_main_nav_a_01.png" alt="" /> 
+
+CityRank.ch is in beta: help us improve it by <a href="/bugs">reporting bugs!</a></p>
+
+{% endblock %}
+    </div>
+  </div>
+</div>
+<!-- end: #footer -->
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-8566957-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+</body>
+</html>
+

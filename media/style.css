@@ -1,0 +1,239 @@
+body {
+	margin:0;
+	padding:0;
+	border:0;			/* This removes the border around the viewport in old versions of IE */
+	width:100%;
+	background:#fff;
+	min-width:600px;    	/* Minimum width of layout - remove line if not required */
+					/* The min-width property does not work in old versions of Internet Explorer */
+
+}
+
+/* Header styles */
+#header {
+	clear:both;
+	float:left;
+	width:100%;
+}
+#header {
+	border-bottom:1px solid #000;
+}
+#title, #title h1, #title img {
+	float: left;
+	padding-left: 5px;
+	margin: 0px;
+}
+
+#header ul {
+/*	clear:left; */
+	float:right;
+	list-style:none;
+	margin:10px 0 0 0;
+	padding:0;
+}
+#header ul li {
+	display:inline;
+	list-style:none;
+	margin:0;
+	padding:5px;
+}
+#header ul li a {
+	display:block;
+	float:left;
+	margin:0 0 0 1px;
+	padding:3px 10px;
+	text-align:center;
+	background:#eee;
+	color:#000;
+	text-decoration:none;
+	position:relative;
+	left:15px;
+	line-height:1.4em;
+}
+#header ul li a:hover {
+	background:#369;
+	color:#fff;
+}
+#header ul li a.active,
+#header ul li a.active:hover {
+	color:#fff;
+	background:#396;
+	/*font-weight:bold;*/
+}
+#header ul li a span {
+	display:block;
+}
+/* 'widths' sub menu */
+#submenu {
+	clear:both;
+	background:#eee;
+	border-top:4px solid #000;
+	margin:0;
+	padding:6px 15px !important;
+	text-align:right;
+}
+/* column container */
+.colmask {
+	position:relative;	/* This fixes the IE7 overflow hidden bug */
+	clear:both;
+	float:left;
+	width:100%;			/* width of whole page */
+	overflow:hidden;		/* This chops off any overhanging divs */
+}
+/* common column settings */
+.colright,
+.colmid,
+.colleft {
+	float:left;
+	width:100%;
+	position:relative;
+}
+.col1,
+.col2,
+.col3 {
+	float:left;
+	position:relative;
+	padding:0 0 1em 0;
+	overflow:hidden;
+}
+/* 2 Column (left menu) settings */
+.leftmenu {
+	background:#fff;		/* right column background colour */
+}
+.leftmenu .colleft {
+	right:70%;			/* right column width */
+	background:#369;	/* left column background colour */
+}
+.leftmenu .col1 {
+	width:67%;			/* right column content width */
+	left:101%;			/* 100% plus left column left padding */
+}
+.leftmenu .col2 {
+	width:30%;			/* left column content width (column width minus left and right padding) */
+	left:5%;			/* (right column left and right padding) plus (left column left padding) */
+}
+#content {
+}
+
+/* Footer styles */
+#footer {
+	clear:both;
+	float:left;
+	width:100%;
+	border-top:1px solid #000;
+	text-align: center;
+}
+#footer p {
+	padding:10px;
+	margin:0;
+}
+
+/* Table layout and appearance */
+td { padding: 5px; }
+tr.even {
+	background-color: #bbffbb;
+}
+
+tr.odd {
+	background-color: #ddffdd;
+}
+
+tr.heading, td.heading {
+	background-color: #99ff99;
+	font-weight: bold;
+}
+
+tr.column, td.column {
+	background-color: #ff8c00;
+	color: #000;
+}
+
+tr.row, td.row {
+	background-color: #0000fd;
+	color: #fff;
+}
+
+/*tr.hide, td.hide { display: none; }*/
+
+ul#source_list {
+	list-style: none;
+}
+
+.col1 h1 { margin-top: 10px; margin-bottom: 10px; }
+
+#aggregation {
+	margin-top: 20px;
+}
+
+table.google-visualization-table-table {
+	width: 250px;
+}
+
+div.slider-bg { 
+	background: url(http://yui.yahooapis.com/2.7.0/build/slider/assets/skins/sam/bg-v.gif) 5px 0 no-repeat;
+}
+
+span.current_city { background-color: #D6E9F8; display: block; width: 100%; }
+
+#block_tools { width: 25%; margin: 5px; padding: 5px; /*background: #fcc;*/ border: 0px solid black; float: left; display: inline; clear:none; text-align: center; }
+
+#block1 { width: 48%; margin: 5px; padding: 5px; background: #fcc; border: 0px solid black; float: left; display: inline; clear:none; text-align: center; }
+#block2 { width: 45%; margin: 5px; padding: 5px; background: #cfc; border: 0px solid black; float: right; display: inline; clear:none; text-align: center; }
+#block3 { width: 48%; margin: 5px; padding: 5px; background: #ccf;  border: 0px solid black; float: left; display: inline; clear:none; text-align: center; }
+#block4 { width: 45%; margin: 5px; padding: 5px; background: #ffc; border: 0px solid black; float: right; display: inline;clear:none;  text-align: center; }
+
+#ranking_tool .google-visualization-table-table { width: 600px; }
+#ranking_tool { width: 600px; margin: 0px auto; }
+tr.match { background: #cff; }
+tr.notmatch { background: #fcc; }
+
+span#register { float: right; font-size: .8em; }
+
+div.slider-box { border: 1px solid black; width: 100px; }
+
+#ranking-tool { margin: 0px auto; }
+
+#share-icon { text-align: center; }
+
+#bugs { float: right; font-size: .8em; font-weight: bold; }
+#bugs a { color: #d00; }
+
+div.col2 h2 { color: #fff; }
+div.col2 h3, div.col2 li a { color: #faf; }
+
+#breadcrumbs { font-size: .8em; margin-top: 10px; }
+
+/* stolen from wikipedia */
+
+#wiki { 
+	text-align: left;
+	float: right;
+	width: 50%;	
+}
+
+.infobox.geography {
+	text-align:left;
+	width:23em;
+	font-size:90%;
+	line-height:1.2em;
+}
+.infobox {
+	background-color:#F9F9F9;
+	border:1px solid #AAAAAA;
+	color:black;
+}
+.infobox {
+	clear:right;
+	margin:0.5em 0 0.5em 1em;
+	padding:0.2em;
+}
+
+.yui-skin-sam .yui-dt th .yui-dt-liner {
+	white-space:normal;
+}
+
+.yui-skin-sam .yui-dt td.mark  {
+	background: transparent url(/media/bar.png) no-repeat scroll 10px 0;
+} 
+
+#aggregation table { background: #fff; }

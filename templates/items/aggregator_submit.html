@@ -1,0 +1,20 @@
+{% extends "base_aggregation.html" %}
+{% block title %} {{ block.super }} | Submit Your Ranking {% endblock %}
+{% block ranking_active %} class="active" {% endblock %}
+
+{% block breadcrumbs %} <a href="/ranking">My Ranking</a> {% include "includes/crumb.html" %} Submit {% endblock %}
+
+{% block headingcol3 %} <h1>Submit Your Ranking</h1> {% endblock %}
+
+{% block main %}
+	<img src="/ranking{{ ranking_id }}.png"/>
+<ul>
+{% for source in weighting %}
+	<li>{{ source.source }} - {{ source.weight }}</li>
+{% endfor %}
+</ul>
+<form method=POST action="/ranking/submit/final/">
+{{ form.as_p }}
+<p><label>&nbsp;</label><input type="submit" value="Submit"/></p>
+</form>
+{% endblock %}

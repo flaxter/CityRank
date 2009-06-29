@@ -1,0 +1,16 @@
+{% extends "base_2cols.html" %}
+
+{% block headingcol3 %}<h1>Data Submission</h1>{% endblock %}
+
+{% block title %}
+{{ block.super }} | Data Submission
+{% endblock %}
+
+{% block main %}
+{% if error %}
+	<p>Something went wrong! We have a file upload limit of 4mb. Please <a href="/contact">contact us</a> if you're trying to send a larger file or if you believe you reached this page in error.</p>
+{% else %}
+	<p>Thank you very much. Automatic processing of data sets is in the works, but for now you'll have to wait a bit longer. We will e-mail you soon to let you know when your data is live!</p>
+{% endif %}
+
+{% endblock %}

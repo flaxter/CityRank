@@ -1,0 +1,42 @@
+{% extends "base_aggregation.html" %}
+{% block indicators_active %} class="active" {% endblock %}
+
+{% block header_scripts %}
+	{% include "includes/tabs.html" %}
+	{{ block.super }}
+{% endblock %}
+
+{% block vizinit %}
+	{{ block.super }}
+/*        var tabs = new YAHOO.widget.TabView("tabs");*/
+{% endblock %}
+
+
+{% load icons %}
+
+{% block headingcol3 %}<h1>1. Choose Your Indicators</h1>{% endblock %}
+
+{% block main %}
+<div class="yui-skin-sam"> 
+	<div id="tabs" class="yui-navset"> 
+			<div>
+				<ul id="source_list">
+				{% for source in sources %}
+					<li>
+					{% if source.aggregate %}
+						{% exclude source.id %} 
+					{% else %}
+						{% include source.id %}
+					{% endif %}
+					<span><strong>{{ source.shortname }}</strong> - <a href="/indicators/{{ source.id }}">{{ source.name }}</a></span>
+					</li>
+				{% endfor %}
+				</ul>
+				<a href="javascript:remove_all()">[unselect all indicators]</a>
+			</div>
+	</div>
+		<h1>2. Build Your <a href="/ranking/">Ranking</a><span class="smaller"> or <a href="/data/submit/">upload your own data...</a></span></h1>
+</div>
+{% endblock %}
+
+{% block current_aggregation_sources %}{% endblock %}

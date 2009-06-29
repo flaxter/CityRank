@@ -1,0 +1,175 @@
+{% extends "base_2cols.html" %}
+
+{% load misc %}
+{% block header_scripts %}
+
+	<script type="text/javascript">
+		{% block vizinit %} 
+			var table;
+			var dataSource;
+			var newCallback;
+			var max_score = -1;
+			var working = false;
+			var indicator_included = {}
+
+			{% if ranking_id %}
+	                        var ranking_id = {{ ranking_id }};
+			{% else %}
+	                        var ranking_id = 1;
+			{% endif %}
+
+			/* yahoo code */
+                        YAHOO.util.Event.addListener(window, "load", function() {
+				dataSource = new YAHOO.util.XHRDataSource("/ranking/json/?version=" + CITYRANK_DATA_VERSION);
+
+                                dataSource.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+                                rankFields = ['Item', 'Rank', 'index'];
+                                dataSource.responseSchema = { resultsList: "Result", fields: rankFields };
+
+				YAHOO.widget.DataTable.Formatter.cityFormatter = 
+					function(elCell, oRecord, oColumn, city) { 
+						var rank = oRecord.getData('index');
+						elCell.innerHTML = "<span class=\"rank\">" + rank + ". </span><a href=\"/cities/" + city + "\" class=\"city\">" + city + "</a>"; 
+					}; 
+
+				var width = 260; //@todo would be better as a percentage than as a fixed width (this width is the inherited width of the left column)
+
+				YAHOO.widget.DataTable.Formatter.scoreFormatter = 
+					function(elCell, oRecord, oColumn, value) { 
+						if(max_score == -1)
+							max_score = value;
+
+						elCell.innerHTML = "<strong>" + value + "</strong>";
+						var xcoord = Math.round(width * (value / max_score));
+						YAHOO.util.Dom.setStyle(elCell.parentNode.parentNode, 'background', 'transparent url({{ MEDIA_URL }}bar.png) repeat-y scroll ' + xcoord + 'px 0px');
+					}; 
+
+				var columnDefs = [{key:"Item", sortable:true, formatter:"cityFormatter"}, 
+					{key:"Rank", sortable:true, formatter:"scoreFormatter"}];
+			
+				var paginator = new YAHOO.widget.Paginator({rowsPerPage: 15, 
+					firstPageLinkLabel: '<span class="sign">&laquo;</span>first',
+					previousPageLinkLabel: '<span class="sign">&lsaquo;</span>prev',
+					nextPageLinkLabel: 'next<span class="sign">&rsaquo;</span>',
+					lastPageLinkLabel: 'last<span class="sign">&raquo;</span>'
+				});
+
+	                        {% for source in sources %} <!-- on the the Indicator list page indicator_included will be initialized here: -->
+					indicator_included[{{ source.id }}] = {{ source.aggregate|js_bool }};
+				{% endfor %}
+				{% if datasource %} <!-- on the Indicator detail page indicator_included will be initialized here: -->
+					indicator_included[{{datasource.id }}] = {{ datasource.aggregate|js_bool }};
+				{% endif  %}
+
+				var table = new YAHOO.widget.DataTable("aggregation", columnDefs, dataSource, { initialRequest: "",     paginator : paginator });
+				table.setAttributeConfig("MSG_EMPTY", {	value: "<strong>No indicators selected!</strong>" });
+
+				var dataCallback = function(request, response, payload) {
+					table.onDataReturnInitializeTable(request, response, payload);
+					paginator.set('totalRecords', response.results.length); 
+					{% if highlight_city %}
+						paginator.setPage({{ page }} + 1, false);
+						table.selectRow(table.getTrEl({{ row }}));
+					{% endif %}
+/*					YAHOO.util.Dom.addClass(table.getTrEl(0), 'ranked-first');
+					YAHOO.util.Dom.addClass(table.getTrEl(1), 'ranked-second');
+					YAHOO.util.Dom.addClass(table.getTrEl(2), 'ranked-third');*/
+
+					$("#status2").html("");
+					ranking_id += 1;
+					$("#ranking_icon").attr("src", "/ranking_s" + ranking_id + ".png?rnd=" + new Date().getTime());
+					working = false;
+				}
+				newCallback = {
+					success: dataCallback,
+					failure: function() { 
+						working = false;
+						$("#status2").html("An error occurred. <a href=\"javascript:refresh_ranking()\">Refresh the ranking...</a>");
+						YAHOO.log("Polling failure", "error"); 
+					}, 
+					scope: table
+				};
+				dataSource.sendRequest("?rnd=" + new Date().getTime(), newCallback);
+				
+				$("#expand-indicator-list").click(function () {
+					if(expanded) {
+					      $(".box100").removeClass("expanded");
+					}
+					else {
+					      $(".box100").addClass("expanded"); 
+					}
+					expanded = !expanded;
+				});
+			});
+
+			var expanded = false;
+			var remove_img = "{{ MEDIA_URL }}remove.png"; /* this is really hack-ish */
+			var add_img = "{{ MEDIA_URL }}add.png"; /* this is really hack-ish */
+			function refresh_ranking() {
+				max_score = -1;
+				dataSource.sendRequest("?rnd=" + new Date().getTime(), newCallback);
+
+				$("#status2").html("<p id=\"loading-status\"><img src=\"{{ MEDIA_URL }}loading.gif\" alt=\"loading...\"/></p>");
+			}
+
+			function remove_all() {
+				if(working) {
+					$("#status2").html("<p><img src=\"{{ MEDIA_URL }}loading.gif\" alt=\"loading...\" /><br />Please wait...</p>");
+					return;
+				}
+				working = true;
+				$("#status2").html("<p><img src=\"{{ MEDIA_URL }}loading.gif\" alt=\"loading...\" /></p>");
+				
+				{% for source in sources %}
+					$("#toggle" + {{ source.id }}).attr({src : add_img});
+					indicator_included[{{ source.id }}] = false;
+				{% endfor %}
+				dataSource.sendRequest("&remove_all=1&rnd=" + new Date().getTime(), newCallback);
+			}
+			function toggle_ranking(id) {
+				if(working) {
+					$("#status2").html("<p id=\"loading-status\"><img src=\"{{ MEDIA_URL }}loading.gif\" alt=\"loading...\"/>Please wait...</p>");
+					return;
+				}
+				max_score = -1;
+				working = true;
+				$("#status2").html("<p id=\"loading-status\"><img src=\"{{ MEDIA_URL }}loading.gif\" alt=\"loading...\" /></p>");
+				if(indicator_included[id])  {
+					$("#toggle" + id).attr({src : add_img});
+				}
+				else {
+					$("#toggle" + id).attr({src : remove_img});
+				}
+				indicator_included[id] = !indicator_included[id];
+				dataSource.sendRequest("&toggle=" + id + "&rnd=" + new Date().getTime(), newCallback);
+			}
+		{% endblock %}
+	</script>
+{% endblock %}
+
+{% block headingcol1 %}<h1><a href="/ranking/">My Ranking <img border=0 id="ranking_icon" /></a></h1>{% endblock %}
+
+{% block indicatorlist %}
+{% block current_aggregation_sources %}
+	<p id="indicator-box" class="myrankings">
+	Includes <a href="/indicators/" id="add-remove-indicator">[+/-]</a>
+<span class="tools2"><a href="#" id="expand-indicator-list">(show all)</a></span>:
+	{% for source in current_aggregation_sources %}
+		{% if forloop.last %}
+			<a href="/indicators/{{ source.id }}" class="last">
+		{% else %}
+			<a href="/indicators/{{ source.id }}">
+		{% endif %}
+		{{ source.shortname }}</a>
+	{% endfor %}
+	</p>
+{% endblock %}
+{% endblock %}
+{% block rankingtable %}
+<div class="yui-skin-sam">
+	<div id="status2"></div>
+	<div id="aggregation"></div>
+	<p>Instructions: use the <a href="/indicators/">Indicators</a> page to select indicators and begin building your ranking.</p>
+<p>When you're satifisfied, go to the <a href="/ranking/">My Ranking</a> page to assign weights to each of the indicators and finish building your ranking.</p><p><a href="/explain/">How does it work?</a></p>
+</div>
+{% endblock %}

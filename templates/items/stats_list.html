@@ -1,0 +1,16 @@
+{% extends "base_aggregation.html" %}
+{% block stats_active %} class="active" {% endblock %}
+
+{% load icons %}
+
+{% block headingcol3 %}<h1>Statistics</h1>{% endblock %}
+
+{% block main %}
+	<ul id="source_list" class="no-indent">
+	{% for source in sources %}
+		<li><span><strong class="title">{{ source.shortname }}</strong> - <a href="/stats/{{ source.id }}">{{ source.name }}</a></span></li>
+	{% endfor %}
+	</ul>
+	<em>[and many more, coming soon!]</em>
+	<h2><a href="/data/submit/">Upload your own statistics...</a></h2>
+{% endblock %}

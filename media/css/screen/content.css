@@ -1,0 +1,613 @@
+@charset "UTF-8";
+/**
+ * "Yet Another Multicolumn Layout" - (X)HTML/CSS Framework
+ *
+ * (en) Uniform design of standard content elements
+ *
+ * @copyright       Copyright 2005-2009, Dirk Jesse
+ * @license         CC-A 2.0 (http://creativecommons.org/licenses/by/2.0/),
+ *                  YAML-C (http://www.yaml.de/en/license/license-conditions.html)
+ * @link            http://www.yaml.de
+ * @package         yaml
+ * @version         3.1
+ * @revision        $Revision: 343 $
+ * @lastmodified    $Date: 2009-01-19 23:41:32 +0100 (Mo, 19. Jan 2009) $
+ * @appdef yaml
+ */
+
+@media all
+{
+ /**
+  * Fonts
+  *
+  * (en) global settings of font-families and font-sizes
+  *
+  * @section content-global-settings
+  */
+
+  /* (en) reset font size for all elements to standard (16 Pixel) */
+  html * { font-size: 100.01%; }
+
+ /**
+  * (en) reset monospaced elements to font size 16px in all browsers
+  *
+  * @see: http://webkit.org/blog/67/strange-medium/
+  */
+
+  textarea, pre, code, kbd, samp, var, tt {	font-family:  Arial, Helvetica, sans-serif; }
+
+  /* (en) base layout gets standard font size 12px */
+  body {
+    font-family:  Arial, Helvetica, sans-serif;
+    font-size: 75.00%;
+    color: #4C4C4C;
+  }
+
+  /*--- Headings ------------------------------------------------------------------------*/
+
+ #main h1,#main h2,#main h3,#main h4,#main h5,#main h6 {
+    font-weight: normal;
+    color:#00C1B7;
+    margin: 0 0 0.25em 0;
+	width: 100%;
+	letter-spacing: -0.05em;
+  }
+  #main #col3 h1 {font-size: 430%;color: #000;}
+
+  #main h1 { font-size: 190%; font-weight:bold;}                       /* 23px */
+  #main h2 { font-size: 150%;font-weight:bold;}                       /* 18px */
+  #main h3 { font-size: 133.33%; font-weight:bold;}                       /* 16px */
+  #main h4 { font-size: 116.67%; font-weight:bold;}                    /* 14px */
+  #main h5 { font-size: 116.67%; font-weight:bold;}                    /* 14px */
+  
+  #main h1 a {color:#00C1B7;text-decoration: none;}
+  #main h1 a:hover {color:#000;}
+  #main h1 .smaller {font-size: 50%;font-weight: normal;letter-spacing: -0.03em;}
+  #main h2 a,
+  #main h3 a {color:#000;text-decoration: none;}
+  #main h2 a:hover,
+  #main h3 a:hover {color:#00C1B7;}
+
+  #main h1.style1 .content-wrapper {background-color: #FFF; padding: 0.2em 15px; color. #000;}
+  #main h1.style1 a {color: #00C1B7;}
+  #main h1.style1 a:hover {color: #000;}
+  #main h1.medium-size {font-size: 180% !important;margin-bottom: 2em !important; }
+  #main h1.medium-size .content-wrapper {padding: 0.5em 15px;}
+
+  #main h2.style2 {margin: 0 0 1em 0; padding: 0 0 0.5em 0;}  
+  #main h2.style2 .content-wrapper {border-bottom: 3px solid #FFF; padding: 0.2em 0;}
+  #main h2.style2 a {color: #00C1B7;}
+  #main h2.style2 a:hover {color: #000;}
+  
+  #main h2.style3 {font-size: 190%; margin-bottom: 0.35em;}
+  #main h2.style3 .content-wrapper {display: block;border-bottom: 1px solid #C8C8C8; margin-right: 30px;}
+  
+  .hidecol1 #col3 .box100 .heading1  h2 {font-size: 190%;}
+  
+  /* --- Lists -------------------------------------------------------------------------------- */
+
+  ul, ol, dl { line-height: 1.5em; margin: 0 0 1em 1em; }
+  ul li { list-style-type: disc; }
+  ul ul li { list-style-type: circle; }
+
+  ol li { list-style-type: decimal; }
+  ol ol li { list-style-type: lower-latin; }
+
+  li { margin-left: 0.8em; line-height: 1.5em; }
+
+  dt { font-weight: bold; }
+  dd { margin: 0 0 1em 0.8em; }
+
+  /* --- general text formatting  ------------------------------------------ */
+  #col3 p,
+  #col3 blockquote,
+  #col3 cite,
+  #col3 hr {width: 650px;}
+  
+  .hidecol1 #col3 p {width: 860px;}
+  .hidecol1 #col3 blockquote,
+  .hidecol1 #col3 cite,
+  .hidecol1 #col3 hr {width: 890px;}
+  
+  p { line-height: 1.5em; margin: 0 0 1em 0;}
+/*deprecated #main #col3 p {margin-left: 30px; }*/
+  #main #col3 .indent {margin-left: 30px;}
+  
+  blockquote, cite,q {font-family: Georgia, "Times New Roman", Times, serif; font-style:italic;}
+  blockquote { margin: 0 0 1em 1.6em; }
+
+  strong,b { font-weight: bold; }
+  em,i { font-style: italic; }
+
+  pre, code, kbd, tt, samp, var { font-size: 100%; }
+  pre, code { color: #800; }
+  pre { line-height: 1.5em; margin: 0 0 1em 0; }
+  kbd, samp, var { color: #666; }
+  var { font-style: italic; }
+
+  acronym, abbr {
+    border-bottom: 1px #aaa dotted;
+    font-variant: small-caps;
+    letter-spacing: .07em;
+    cursor: help;
+  }
+
+  sub, sup { font-size: 91.6667%; }
+
+  hr {
+    color: #fff;
+    background:transparent;
+    margin: 0 0 0.5em 0;
+    padding: 0 0 0.5em 0;
+    border:0;
+    border-bottom: 1px #eee solid;
+  }
+
+  /*--- Links ----------------------------------------------------------------------------------------- */
+
+  a { color: #4C4C4C; background:transparent; text-decoration:underline; }
+  a:visited  { color: #4C4C4C; }
+
+  a:focus,
+  a:hover,
+  a:active { color:#000; text-decoration:none; }
+
+  /* --- images (with optional captions) ------------------ */
+
+  p.icaption_left { float:left; display:inline; margin: 0 1em 0.15em 0; }
+  p.icaption_right { float:right; display:inline; margin: 0 0 0.15em 1em; }
+
+  p.icaption_left img,
+  p.icaption_right img { padding:0; border: 1px #888 solid; }
+
+  p.icaption_left strong,
+  p.icaption_right strong { display:block; overflow:hidden; margin-top: 2px; padding: 0.3em 0.5em; background: #eee; font-weight: normal; font-size: 91.667%; }
+
+ /**
+  * ------------------------------------------------------------------------------------------------- #
+  *
+  * Generic Content Classes
+  *
+  * (en) standard classes for positioning and highlighting
+  *
+  * @section content-generic-classes
+  */
+
+  .highlight { color: #f60; }
+  .dimmed { color: #888; }
+
+  .info { background: #f8f8f8; color: #666; padding: 10px; margin-bottom: 0.5em; font-size: 91.7%; }
+
+  .note { background: #efe; color: #040; border: 2px #484 solid; padding: 10px; margin-bottom: 1em; }
+  .important { background: #ffe; color: #440; border: 2px #884 solid; padding: 10px; margin-bottom: 1em; }
+  .warning { background: #fee; color: #400; border: 2px #844 solid; padding: 10px; margin-bottom: 1em; }
+
+  .float_left { float: left; display:inline; margin-right: 1em; margin-bottom: 0.15em; }
+  .float_right { float: right; display:inline; margin-left: 1em; margin-bottom: 0.15em; }
+  .center { display:block; text-align:center; margin: 0.5em auto; }
+
+ /**
+  * ------------------------------------------------------------------------------------------------- #
+  *
+  * Tables
+  *
+  * (en) Generic classes for table-width and design definition
+  *
+  * @section content-tables
+  */
+
+  table { width: auto; border-collapse:collapse; margin-bottom: 0.5em; border-top: 2px #888 solid; border-bottom: 2px #888 solid; }
+  table caption { font-variant:small-caps; }
+  table.full { width: 100%; }
+  table.fixed { table-layout:fixed; }
+
+  th,td { padding: 0.5em; }
+  thead th { color: #000; border-bottom: 2px #800 solid; }
+  tbody th { background: #e0e0e0; color: #333; }
+  tbody th[scope="row"], tbody th.sub { background: #f0f0f0; }
+
+  tbody th { border-bottom: 1px solid #fff; text-align: left; }
+  tbody td { border-bottom: 1px solid #eee; }
+
+  tbody tr:hover th[scope="row"],
+  tbody tr:hover tbody th.sub { background: #f0e8e8; }
+  tbody tr:hover td { background: #fff8f8; }
+
+ /**
+  * ------------------------------------------------------------------------------------------------- #
+  *
+  * Miscellaneous
+  *
+  * @section content-misc
+  */
+
+ /**
+  * (en) Emphasizing external Hyperlinks via CSS
+  *
+  * @section             content-external-links
+  * @app-yaml-default    disabled
+  */
+
+  /*
+  #main a[href^="http://www.my-domain.com"],
+  #main a[href^="https://www.my-domain.com"]
+  {
+    padding-left: 12px;
+    background-image: url('your_image.gif');
+    background-repeat: no-repeat;
+    background-position: 0 0.45em;
+  }
+  */  
+  
+  
+ /*RANKING TABLE LEFT COLUMN*/
+ 
+/*loading status*/
+#main #status2 #loading-status {position: absolute; top: -30px; left: 0px; color: #000; font-weight: bold; line-height: 14px;}
+#main #status2 #loading-status img {margin: 0 5px 0 0; vertical-align: bottom;}
+
+/*reset some yui-set stuff*/
+.yui-skin-sam .yui-dt-liner{margin:0;padding:0;}
+.yui-skin-sam .yui-dt th a {font-weight:normal; text-decoration: underline; padding-right: 8px; }
+.yui-skin-sam .yui-dt th a:hover {text-decoration: none; }
+.yui-skin-sam .yui-dt th {margin:0;padding:0;border:none;}
+.yui-skin-sam th.yui-dt-sortable .yui-dt-label{margin-right:0;}
+
+/*include some yui-styles*/
+.yui-skin-sam .yui-dt table{border-collapse:separate;*border-collapse:collapse;border-spacing:0;}
+.yui-skin-sam .yui-pg-first,
+.yui-skin-sam .yui-pg-previous,
+.yui-skin-sam .yui-pg-next,
+.yui-skin-sam .yui-pg-last {display:inline-block; padding: 0; margin:0;line-height: 21px;}
+
+/*pagination*/
+#main .yui-dt-paginator { border-top: 3px solid #C8C8C8; text-align: right; margin:0; line-height: 19px; background: #F5F5F5 url(../../images/bg_main_01.png) no-repeat -30px -110px !important; overflow: auto;}
+#main .yui-dt-paginator span,
+#main .yui-dt-paginator a {text-decoration: none; color: #4C4C4C; margin:0; padding: 2px 0;}
+#main .yui-dt-paginator a:hover {color: #000;}
+#main .yui-dt-paginator .yui-pg-first,
+#main .yui-dt-paginator .yui-pg-previous {float: left;}
+#main .yui-dt-paginator .yui-pg-previous {padding-left: 3px;}
+#main .yui-dt-paginator .sign {font-size: 14px;}
+#main .yui-dt-paginator .yui-pg-first .sign,
+#main .yui-dt-paginator .yui-pg-previous .sign {padding-right: 2px;}
+#main .yui-dt-paginator .yui-pg-next .sign,
+#main .yui-dt-paginator .yui-pg-last .sign {padding-left: 2px;}
+#main .yui-dt-paginator a .sign {color: #00BBA9;}
+#main .yui-dt-paginator a:hover .sign {color: #000;}
+/*hide pages between pagination-buttons*/  
+#main .yui-pg-pages {display: none;}
+#main #yui-dt0-paginator1,
+#main #yui-dt1-paginator1 {display: none;}
+
+/*sorting row with item & rank*/
+#main table thead th .yui-dt-liner {line-height: 19px;padding: 2px 0;}
+
+/*base_aggregation ranking table*/
+#main table {
+	width: 100%;
+	border: none;
+	border-top: 3px solid #C8C8C8;
+	border-bottom: 3px solid #C8C8C8;
+	padding: 0;
+}
+
+
+#main #col3 table {width: 650px;}
+#main table thead {	border: none;}
+#main table tr {border: none;border-bottom: 1px solid #C8C8C8; background: transparent;}
+#main table th {background: transparent;border: none;}
+#main table tbody {border: none; background-color: #FFF; }
+
+/* again, forgive me, but I had to make an executive decision --srf */
+/*	#aggregation table { background-color: #dfdfdf; } 
+	#aggregation table tbody { background-color: #dfdfdf; }  
+#aggregation table tbody yui-dt-sortable { background-color: #ff0000; } */
+/* end forgive me == actually, I changed the color of bar.png instead...
+ * but it's not working right in Chrome! =( */
+
+#main table tbody td {
+	border: none;
+	border-top: 1px solid #C8C8C8;
+	background: transparent;
+	margin: 0;
+	padding: 0;
+}
+#main table tbody td .rank,
+#main table tbody td .item,
+#main table tbody td strong {
+	line-height: 29px;
+	text-decoration: none;
+	background: transparent;
+	font-weight: bold;
+	letter-spacing: -0.05em;
+}
+#main table tbody td .rank {
+    font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 23px;
+	color: #00C1B7;
+	width: 48px;
+	display: block;
+	float: left;
+}
+#main table tbody td .item,
+#main table tbody td strong {font-family:  Arial, Helvetica, sans-serif; font-size: 16px; color: #999;}
+#main table tbody td .item {color: #000;}
+
+#main table .yui-dt-sortable {line-height: 21px;}
+#main table .yui-dt-col-City {padding-left: 9px;}
+
+/*first rank: gold*/
+#main table tbody .ranked-first td .rank,
+#main table tbody .ranked-first td strong,
+#main #col3 #ranking-tool .ranked-first .yui-dt0-col-Rank .yui-dt-liner { color: #B79A5F;}
+/*second rank: silver*/
+#main table tbody .ranked-second td .rank,
+#main table tbody .ranked-second td strong,
+#main #col3 #ranking-tool .ranked-second .yui-dt0-col-Rank .yui-dt-liner { color: #878787;}
+/*third rank: bronze*/
+#main table tbody .ranked-third td .rank,
+#main table tbody .ranked-third td strong,
+#main #col3 #ranking-tool .ranked-third .yui-dt0-col-Rank .yui-dt-liner { color: #C0673F;}
+
+/*@todo: get rid of some weird background for weird safari -> still not working*/
+#main table tbody .yui-dt0-col-Rank,
+#main table tbody .yui-dt-col-Rank {background-color: transparent !important;background: transparent !important;}
+
+/*mark selected row*/
+#main table .yui-dt-selected td {border-top: 1px solid #999;border-bottom: 1px solid #666; background: #0aa;}
+#main table .yui-dt-message strong {padding-left: 9px;}
+
+/*COL1*/
+/*#col1 box100 is being expanded using jquery */
+#main #col1 #indicator-box {overflow: hidden;height: 50px; position: relative; padding: 1px 0 10px 0;}
+#main #col1 .box100.expanded {height: auto; overflow: visible;}
+#main #col1 .box100.expanded #indicator-box {overflow: visible;height: auto;}
+
+#main  #col1 .myrankings {color:#00C1B7;height: 50px;}
+#main #col1 .myrankings a {background: transparent url(../../images/bg_main_myrankings_a_01.png) no-repeat 100% 5px;padding-right: 7px;}
+#main #col1 .myrankings a.last {background: transparent;padding-right: 0;}
+#main #col1 #indicator-box .tools { margin-bottom: -15px; display: block;}
+#main #col1 #indicator-box .tools a {background: none; display: block;}
+
+#main #col1 .box100 #expand-indicator-list,
+#main #col1 .box100 #add-remove-indicator {background: transparent; padding-right: 0; color: #00C1B7;}
+
+/*COL3*/
+/* only aply to overall-map under items: #map {border-top: 3px solid #00C1B7;}*/
+
+#main #col3 #tabs {	width: 650px;}
+#main.hidecol1 #col3 #tabs {width: 890px;}
+
+#main #col3 #tabs .yui-nav {
+	list-style: none;
+	margin: 0 0 1em 0;
+	border: none;
+	border-bottom: 1px solid #00C1B7;
+}
+#main #col3 #tabs .yui-nav li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: inline;
+	border: none;
+}
+#main #col3 #tabs .yui-nav li a {
+	line-height: 31px;
+	font-size: 23px;
+	letter-spacing: -0.05em;
+	font-weight: bold;
+	color: #00C1B7;
+	background: #B2E7E4 url(../../images/bg_main_subnav_a_01.png) no-repeat 100% 10px;
+	text-decoration: none;
+	padding: 0 12px 2px 5px;
+	margin: 0;
+	border: none;
+	border-top: 3px solid #00C1B7; 
+	display: inline;
+}
+
+#main #col3 #tabs .yui-nav li.first a {padding-left: 10px;}
+#main #col3 #tabs .yui-nav li.last a {padding-right: 10px; background: #B2E7E4;}
+#main #col3 #tabs .yui-nav li a em {font-style: normal;	border: none; padding: 0; display: inline;}
+#main #col3 #tabs .yui-nav li.selected a,
+#main #col3 #tabs .yui-nav li a:hover {color: #FFF;}
+
+#main #col3 #tabs .yui-content {background: transparent;border: none;padding: 0;}
+/*deprecated#main #col3 #tabs .yui-content p {padding-left: 0;}*/
+
+/*indicators*/
+#col3 #source_list {
+	width: 650px;
+	border: none;
+	border-top: 3px solid #C8C8C8;
+	padding: 0;
+	margin: 0 0 1em 0;
+}
+#col3 #source_list li {
+	margin: 0;
+	list-style: none;
+	overflow: hidden;
+	border-bottom: 1px solid #C8C8C8;
+}
+#col3 #source_list li a {
+	height: 30px;
+	width: 30px;
+	display: block;
+	float: left;
+}
+#col3 #source_list li a img {margin: 5px;}
+#col3 #source_list li span {
+	display: block;
+	height: 30px;
+	padding-left: 38px;
+	line-height: 30px;
+}
+#col3 #source_list li span strong {	font-size: 18px;color: #00C1B7;}
+#col3 #source_list li span a {display: inline;float: none;}
+#col3 #source_list.no-indent li span {padding-left: 0;}
+
+/*COL3 weighting */
+#ranking-tool table {border: none;}
+#ranking-tool th.yui-dt-col-Rank span,
+#ranking-tool th.yui-dt-col-City span {display: none;}
+
+/*loading icon*/
+#loading-icon {float: left; padding-top: 13px;}
+
+/*share your ranking button*/
+#ranking-tool a.button01 {
+	position: relative;
+	display: block;
+	height: 35px;
+	min-width: 180px;
+	margin: 4px  auto;
+	font-size: 16px;
+	line-height: 35px;
+	font-weight: bold;
+	letter-spacing: -0.05em;
+	text-align: center;
+	text-decoration: none;
+	color: #00C1B7;
+	cursor: pointer;
+}
+#ranking-tool a.button01 .button-middle {
+	display: block;
+	height: 35px;
+	background: transparent url(../../images/bg_button01_middle.png) repeat-x 0 0;
+	white-space: nowrap;
+}
+#ranking-tool a:hover.button01 .button-middle  {background-position: 0 -35px; color: #999;}
+#ranking-tool a.button01 .button-left-side,
+#ranking-tool a.button01 .button-right-side {
+	position: absolute;
+	top: 0;
+	height: 35px;
+	width: 8px;
+	background: transparent url(../../images/bg_button01_left-side.png) no-repeat 0 0;
+}
+#ranking-tool a.button01 .button-left-side {left: 0;float: left;}
+#ranking-tool a:hover.button01 .button-left-side {background-position: 0 -35px;	}
+#ranking-tool a.button01 .button-right-side {right: 0;float: right;	background-image: url(../../images/bg_button01_right-side.png);}
+#ranking-tool a:hover.button01 .button-right-side {background-position: 0 -35px;}
+
+/*ranking table*/
+#main #col3 #ranking-tool .yui-dt-liner {line-height: 29px;}
+#main #col3 #ranking-tool table {width: auto;}
+#main #col3 #ranking-tool table tr,
+#main #col3 #ranking-tool table tbody {background-color: transparent;}
+#main #col3 #ranking-tool table th,
+#main #col3 #ranking-tool table td {padding-left: 15px;	border: none;}
+#main #col3 #ranking-tool th .yui-dt-liner {text-align: left; padding: 0 0 6px 0; overflow: visible !important; width: auto !important;	white-space: normal;}
+#main #col3 #ranking-tool th {width: auto; white-space: normal;}
+#main #col3 #ranking-tool th .yui-dt-label {width: auto;}
+#main #col3 #ranking-tool th .yui-dt-label a {
+	width: auto;
+	white-space: normal;
+	font-size: 23px;
+	letter-spacing: -0.05em;
+	font-weight: bold;
+	text-decoration: none;
+}
+#main #col3 #ranking-tool td.slider-td {border: none;}
+#main #col3 #ranking-tool #share-icon {	text-align: center; padding: 0 30px; border-bottom: 3px solid #C8C8C8;}
+#main #col3 #ranking-tool #share-icon img {	margin: 0 auto;	width: 180px; height: 160px;}
+#main #col3 #ranking-tool #status img {height: 16px;width: 16px; margin-left: -23px;}
+/*the parent div of div.slider has the indicator-color-class attribute. The colors come from the seperate and included colors.css stylesheet*/
+#main #col3 #ranking-tool .yui-dt-label div {text-align: center;}
+#main #col3 #ranking-tool .slider {background: transparent; padding-top: 7px; border-bottom: 3px solid #C8C8C8;}
+#main #col3 #ranking-tool .yui-skin-sam .yui-v-slider { height: 147px;}
+#main #col3 #ranking-tool .item-slider-bg {
+	position: relative;
+	height: 168px;
+	width: auto;
+	background: transparent url(../../images/bg_slider_01.png) no-repeat 50% 10px;
+}
+#main #col3 #ranking-tool .yui-slider-thumb {left: 50% !important; width: 30px;}
+/*actually this should be -28px but for some weird reasons opera makes the knob then disapear*/
+#main #col3 #ranking-tool .yui-slider-thumb img {margin-left: -27px;}
+#main #col3 #ranking-tool .slider-box-new input.slider-converted-value {
+	width: 120px;
+	text-align: center;
+	background: transparent;
+	border: none;
+	color: #FFF;
+	font-size: 23px;
+	font-weight: bold;
+	letter-spacing: -0.05em;
+}
+#main #col3 #ranking-tool .yui-dt0-col-City,
+#main #col3 #ranking-tool .yui-dt0-col-Rank {padding-left: 0; white-space: nowrap; }
+#main #col3 #ranking-tool .item {white-space: nowrap;}
+#main #col3 #ranking-tool .yui-dt0-col-Rank .yui-dt-liner {text-align: right; font-size: 16px; color: #999;}
+#main #col3 #ranking-tool .yui-dt-liner {border-bottom: 1px solid #C8C8C8; background-color: #FFF; font-weight: bold; text-align: center; overflow: auto; padding: 2px 6px;}
+#main #col3 #ranking-tool .yui-dt0-col-City .yui-dt-liner {overflow: visible; text-align: left;}
+#main #col3 #ranking-tool .table-rank {font-family: Georgia, "Times New Roman", Times, serif; color: #00C1B7; font-size: 23px; float: left;}
+#main #col3 #ranking-tool .table-suffix { color: #00C1B7; float: left; font-size: 16px;}
+#main #col3 #ranking-tool .table-score { color: #999; float: right; font-size: 16px; white-space: nowrap; }
+
+#main #col3 #ranking-tool tr.yui-dt-last .yui-dt-liner {border-bottom: 3px solid #C8C8C8;}
+#main #col3 #ranking-tool th .yui-dt-liner,
+#main #col3 #ranking-tool thead tr.yui-dt-last .yui-dt-liner {border-bottom: none; background: transparent;}
+
+/*gallery*/
+#main #col3 #gallery .yui-content ul {margin: 0;}
+#main #col3 #gallery .yui-content ul li {list-style: none;margin: 0 0 10px 0; padding: 0 0 10px 0; overflow: auto; border-bottom: 1px solid #C8C8C8;}
+#main #col3 #gallery .yui-content ul li .left-col {float: left;}
+#main #col3 #gallery .yui-content ul li .left-col img {width: 80px; height: 40px;}
+#main #col3 #gallery .yui-content ul li .right-col { margin-left: 100px;}
+#main #col3 #gallery .yui-content ul li .title {font-size:21px; font-weight:bold; color: #00C1B7;}
+#main #col3 #gallery .yui-content ul li a:hover {color: #000;}
+
+/*forms*/
+#main #col3 form p { margin-left: 0;}
+#main form p label {float: left;width: 10em;text-align: right;padding-right: 5px;}
+#main form .errorlist {	margin-bottom: 0;margin-left: 11em; color: red;}
+
+/*item search form*/
+#item_search {font-size: 12px;letter-spacing: normal;display: inline;}
+#item_search div {width: 16em;margin: -4.1em 0 0 12em; line-height: 16px;}
+#item_search div input {margin-top: 3px; padding: 0;}
+
+/*HOME*/
+#block2 #twitter_div,
+#block3 #delicious-posts-itemrank  {margin-right: 30px; margin-top: 0.2em;}
+#block2 #twitter_div #twitter_update_list,
+#block3 #delicious-posts-itemrank ul {margin: 0 0 0.5em 0; width: auto;}
+#block2 #twitter_div #twitter_update_list li,
+#block3 #delicious-posts-itemrank ul li {
+	list-style: none;
+	margin: 1em 0 0 0;
+	padding: 1em 0 0 0;
+	border-top: 1px solid #C8C8C8;
+}
+#block2 #twitter_div #twitter-link {
+	color: #00C1B7;
+	font-weight: bold;
+	background: transparent url(../../images/icon_twitter_01.png) no-repeat 100% 0;
+	padding-right: 27px;
+	line-height: 20px;
+}
+#block3 #delicious-posts-itemrank .delicious-network-username a,
+#block3 #delicious-posts-itemrank .delicious-network-add a {color: #00C1B7; font-weight: bold;}
+#block3 #delicious-posts-itemrank .delicious-extended {font-size: 100%; width: auto; }
+
+/*CITIES*/
+/*item_detail*/
+.c50l .inner-content {padding-right: 30px;}
+#main #wiki table.infobox {width: 100% !important; margin: 1em 0; border: none;}
+#main #wiki table tbody {background: transparent;}
+#main #wiki table td {text-align: left; border-top: none;}
+#main #wiki table .fn,
+#main #wiki table .mergedtoprow,
+#main #wiki table .mergedtoprow a  {color: #00C1B7; font-weight: bold;}
+#main #wiki table .mergedtoprow a:hover  {color: #000;}
+#main #wiki table .mergedtoprow td,
+#main #wiki table td .floatnone {padding: 0.5em 0;}
+}
+
+/*EXPLAIN*/
+#explain .column { background-color: #00C1B7; color: #000; padding: 5px; }
+#explain .row { background-color: #ED1E79; color: #000; padding: 5px; }
+#explain .heading { margin-bottom: 5px; margin-top: 5px; }
+

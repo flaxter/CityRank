@@ -1,0 +1,19 @@
+{# is this in use!!!!???? #}
+{% extends "base_aggregation.html" %}
+
+{% block indicators_active %} class="active" {% endblock %}
+
+{% block title %}
+{{ block.super }} | Submit Ranking
+{% endblock %}
+
+{% block breadcrumbs %} <a href="/indicators/">Indicators</a> {% include "includes/crumb.html" %} Submit ranking {% endblock %}
+
+{% block headingcol3 %}<h1>Submit ranking</h1>{% endblock %}
+
+{% block main %}
+	<form action="/items/" method="POST">
+		{{ form.as_p }}
+		<p><label>&nbsp;</label><input type="submit" value="Update"/></p>
+	</form>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base_aggregation.html" %}
+
+{% block title %} {{ block.super }} | Home {% endblock %}
+
+{% block home_active %} class="active" {% endblock %}
+
+{% block headingcol3 %}<h1 class="style1"><span class="content-wrapper">1. <a href="/indicators">Select your indicators</a></span></h1>{% endblock %}
+
+{% block main %}
+	<h2 class="style2"><span class="content-wrapper"> What matters to you? <a href="/indicators/6">Finance</a>, <a href="/indicators/14">Global Transport</a>, <a href="/indicators/5">Quality of Living</a>, and many <a href="/indicators/">more...</a></span></h2>
+	<h1 class="style1"><span class="content-wrapper">2. <a href="/ranking/">Create a ranking</a></span></h1>
+	<h2 class="style2"><span class="content-wrapper">1. <a href="/cities/London/">London,</a> 2. <a href="/cities/New York">New York,</a> 3. <a href="/cities/Paris">Paris,</a> 4. <a href="/cities">and many more...</a></span></h2>
+	<h1 class="style1"><span class="content-wrapper">3. <a href="/gallery/">Share it in the gallery</a></span></h1>
+	<h2 class="style2">
+		{% for weighting in latest %}
+			<a href="/gallery/{{ weighting.id }}"><img src="/media/ranking_icons/icon{{ weighting.id }}.png" border=0 /></a> 
+		{% endfor %}
+	</h2>
+	<h1 class="style1 medium-size"><span class="content-wrapper">Also: <a href="/cities/">How does my city rank?</a></span></h1>
+
+<h2 class="style3"><span class="content-wrapper">Get Involved</span></h2>
+	<div id="block2" class="c50l"> <div id="twitter_div">
+<h2 class="sidebar-title"><a href="http://twitter.com/cityrank">@CityRank on Twitter</a></h2>
+<ul id="twitter_update_list"></ul>
+<a href="http://twitter.com/cityrank" id="twitter-link" style="display:block;text-align:right;">follow me on Twitter</a>
+</div>
+<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>
+<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/cityrank.json?callback=twitterCallback2&amp;count=5"></script></div>
+	<div id="block3" class="c50r"><script type="text/javascript" src="http://feeds.delicious.com/v2/js/cityrank?title=CityLinks&icon=rss&count=10&sort=date&extended&name&showadd"></script></div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#twitter_update_list a').each(function(i) { 
+		$(this).removeAttr('style');
+	 });
+});	  
+</script>
+{% endblock %}

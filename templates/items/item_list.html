@@ -1,0 +1,102 @@
+{% extends "base_aggregation.html" %}
+
+{% block items_active %} class="active" {% endblock %}
+{% block title %} {{ block.super }} |  Cities {% endblock %}
+
+{% block header_scripts %}
+	{% include "includes/gmaps.html" %}
+	{% include "includes/tabs.html" %} 
+	{{ block.super }}
+{% endblock %}
+
+{% block vizinit %}
+	{{ block.super }}
+
+	function drawGmap() {
+		if (GBrowserIsCompatible()) {
+			var map = new GMap2(document.getElementById("map"));
+			map.setCenter(new GLatLng(20, 0), 2);
+			map.setUIToDefault();
+			var blueIcon = new GIcon(G_DEFAULT_ICON);
+			blueIcon.image = "http://gmaps-samples.googlecode.com/svn/trunk/markers/blue/blank.png";
+			var redDot = new GIcon();
+			redDot.image = "{{ MEDIA_URL }}map/reddot.png";
+			redDot.iconSize = new GSize(7,7);
+			redDot.iconAnchor = new GPoint(5,5);
+			redDot.infoWindowAnchor = new GPoint(15, 0);
+			markerOptions = { icon:redDot };
+	    
+			{% for item, country in items %}
+			{
+				var html{{item.id}};
+				point = new GLatLng({{ item.lat }}, {{ item.long }});
+				marker = new GMarker(point, markerOptions);
+				map.addOverlay(marker);
+
+				GEvent.addListener(marker, "click", function() {
+					title = "<h3><a href=\"/items/{{ item.name|urlencode }}\">{{ item.name }}</a>, {{ country.name }}</h3>";
+					map.openInfoWindowHtml(new GLatLng({{ item.lat }}, {{ item.long }}), title + "<p><img src=\"{{ MEDIA_URL }}loading.gif\" alt=\"loading...\" /></p>");
+					if(html{{item.id}}) {
+						map.openInfoWindowHtml(new GLatLng({{ item.lat }}, {{ item.long }}), html{{item.id}});
+					}
+					else {
+						GDownloadUrl("/itemsX/{{ item.id }}", function(data, responseCode) {
+							html{{item.id}} = title + data;
+							map.openInfoWindowHtml(new GLatLng({{ item.lat }}, {{ item.long }}), html{{item.id}}); }); 
+					}
+				} );
+			}
+			{% endfor %}
+		}
+	}
+
+	google.setOnLoadCallback(drawGmap);
+
+	$(itemFormInit);
+	function itemFormInit() {
+		var formChange = $( "#id_item" );
+		formChange.change( function(event) { 
+			$("form#item_search").submit(); 
+		});
+	}
+
+/*	var tabs = new YAHOO.widget.TabView("tabs");*/
+{% endblock %}
+
+{% block headingcol3 %}<h1 id="item">Cities
+<form action="." method="POST" id="item_search">
+<div>Go to the detailed page for {{ form.item }}</div>
+</form>
+</h1>{% endblock %}
+
+{% block main %}
+{% comment %}
+<div class="yui-skin-sam">
+	<div id="tabs" class="yui-navset">
+		<ul class="yui-nav">
+			<li class="selected"><a href="#tab1"><em>List</em></a></li>
+			<li><a href="#tab2"><em>Map</em></a></li>
+			<li><a href="#tab2"><em>Countries</em></a></li>
+		</ul>
+		<div class="yui-content"> {% endcomment %}
+
+			<div id="map" style="width:650px; height:500px;"></div>
+<p>
+<div id="search">
+
+</div>
+</p>
+{% comment %}			<div>	
+				<ul>
+				{{ queryset }}
+				{% for item, country in items %}
+				    <li><a href="/items/{{ item.name|urlencode }}">{{ item.name }}</a>, {{ country }}</li>
+				{% endfor %}
+				</ul>
+			</div>
+			<div>tab 3</div>
+		</div>
+	</div>
+</div> {% endcomment %}
+{% endblock %}
+

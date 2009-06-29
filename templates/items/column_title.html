@@ -1,0 +1,13 @@
+{% comment %} need to end lines with \ since this template is used as part of a multiline javascript string {% endcomment %} \
+<a href="/indicators/{{ id }}">{{ name }}</a> \
+<div id=header-{{ id }}> \
+	<div class="slider">  \
+		<div id="slider-bg-{{ id }}" class="slider-bg yui-v-slider" tabindex="-1" title="Slider">  \
+			<div id="slider-thumb-{{ id }}" class="yui-slider-thumb"> \
+				<img src="{{ MEDIA_URL }}thumb-e.gif"> \
+			</div> \
+		</div> \
+		<div class="slider-box-new"><input autocomplete="off" id="slider-converted-value-{{ id }}" class="slider-converted-value" type="text" value="0" size="4" maxlength="4" /> \
+		</div> \
+	</div> \
+</div> \

@@ -1,0 +1,116 @@
+{% extends "base_aggregation.html" %}
+{% load misc %}
+{% block header_scripts %}
+        {% include "includes/gmaps.html" %}
+<!-- Dependencies -->
+<script src="http://yui.yahooapis.com/2.7.0/build/yahoo/yahoo-min.js"></script>
+
+<!-- Source file -->
+<script src="http://yui.yahooapis.com/2.7.0/build/json/json-min.js"></script>
+
+        {{ block.super }}
+{% endblock %}
+
+{% block vizinit %}
+        {{ block.super }}
+	var map, geocoder;
+	function drawGmap() {
+		map = new GMap2(document.getElementById("map"));
+		map.setCenter(new GLatLng(34, 0), 1);
+		geocoder = new GClientGeocoder();
+	}
+	function lookup_address() {
+		lookup($("#address_field").val());
+		return false;
+	}
+	    function addAddressToMap(response) {
+	      map.clearOverlays();
+	      if (!response || response.Status.code != 200) {
+		alert("Sorry, we were unable to geocode that address");
+	      } else {
+		place = response.Placemark[0];
+		point = new GLatLng(place.Point.coordinates[1],
+				    place.Point.coordinates[0]);
+		marker = new GMarker(point);
+		map.addOverlay(marker);
+
+		var name;
+		if(place.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.LocalityName)
+			name =place.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.LocalityName;
+		else if(place.AddressDetails.Country.AdministrativeArea.Locality.LocalityName)
+			name = place.AddressDetails.Country.AdministrativeArea.Locality.LocalityName;
+		else
+			name = '';
+		alert(YAHOO.lang.JSON.stringify(place.AddressDetails, ','));
+		var request = "/search/?";
+		request += "lat=" + place.Point.coordinates[1];
+		request += "&long=" + place.Point.coordinates[0];
+		if(name)
+			request += "&name=" + name;
+		request += "&country=" + place.AddressDetails.Country.CountryNameCode;
+
+		GDownloadUrl(request, function(data, responseCode) {
+			if(data == "-1") {
+				marker.openInfoWindowHtml(place.address + ' was not found. <a href=\"\">Add to database?</a><form>{{ form.as_p }}</form>'); 
+			}
+			else {
+				marker.openInfoWindowHtml(data);
+			}
+		} );
+
+	      }
+	    }
+
+	function lookup(address)  {
+		geocoder.getLocations(address, addAddressToMap);
+		return false;
+	}
+        google.setOnLoadCallback(drawGmap);
+
+{% endblock %}
+
+{% block main %} 
+<p>
+<form action="" id="searchbox_014287059575238747478:fjxtjwm0whk" onsubmit="return false;">
+  <div>
+    <input type="text" name="q" size="40"/>
+    <input type="submit" value="Search"/>
+  </div>
+</form>
+<script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=searchbox_014287059575238747478%3Afjxtjwm0whk&lang=en"></script>
+
+<div id="results_014287059575238747478:fjxtjwm0whk" style="display:none">
+  <div class="cse-closeResults">
+    <a>&times; Close</a>
+  </div>
+  <div class="cse-resultsContainer"></div>
+</div>
+
+<style type="text/css">
+@import url(http://www.google.com/cse/api/overlay.css);
+</style>
+
+<script src="http://www.google.com/uds/api?file=uds.js&v=1.0&key=ABQIAAAANpnmwXVLbQJgrWJhN453dRRjfvAp6YikcujfWYOuPwbjaZonpRT4UFbwG44lwKee70jOnMyr2JOUCQ&hl=en" type="text/javascript"></script>
+<script src="http://www.google.com/cse/api/overlay.js" type="text/javascript"></script>
+<script type="text/javascript">
+function OnLoad() {
+  new CSEOverlay("014287059575238747478:fjxtjwm0whk",
+                 document.getElementById("searchbox_014287059575238747478:fjxtjwm0whk"),
+                 document.getElementById("results_014287059575238747478:fjxtjwm0whk"));
+}
+GSearch.setOnLoadCallback(OnLoad);
+</script>
+
+
+
+Had the cookie: {{ cookies }}. Value: {{ val }}. {{ foo|number_format }} 
+</p>
+<p>
+<form onSubmit="return lookup_address()">
+<input type=text name=address id="address_field">
+<input type=submit value="lookup">
+</form>
+</p>
+<div id="map" style="width:400px;height:400px;"></div>
+{% endblock %}
+

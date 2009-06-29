@@ -1,0 +1,36 @@
+	<!--<h1>{{ item.name }}</h1>-->
+
+	{% load misc %}
+
+	{% if rankings %}
+		<!--<h2>Rankings</h2>-->
+		<ul>
+		{% for source, rank in rankings %}
+			<li><a href="/indicators/{{ source.id }}">{{ source.shortname }}</a>: {{ rank|rank_suffix }} </li>
+		{% endfor %}
+		</ul>
+	{% endif %}
+	{% if strengths %}
+		<h3>Top 3</h3>
+		<ul>
+		{% for source, rank in strengths %}
+			<li><a href="/indicators/{{ source.id }}">{{ source.shortname }}</a>: {{ rank|rank_suffix }} </li>
+		{% endfor %}
+		</ul>
+	{% endif %}
+	{% if weaknesses %}
+		<h3>Bottom 3</h3>
+		<ul>
+		{% for source, rank in weaknesses %}
+			<li><a href="/indicators/{{ source.id }}">{{ source.shortname }}</a>: {{ rank|rank_suffix }} </li>
+		{% endfor %}
+		</ul>
+	{% endif %}
+	{% if stats %}
+		<h3>Statistics</h3>
+		<ul>
+		{% for source, data in stats %}
+			<li><a href="/stats/{{ source.id }}">{{ source.shortname }}</a>: {{ data.value|number_format:data.scheme.decimals }} {{ data.scheme.description }} </li>
+		{% endfor %}
+		</ul>
+	{% endif %}

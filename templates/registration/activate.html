@@ -1,0 +1,14 @@
+{% extends "base_2cols.html" %}
+
+{% block title %}{{ block.super }} | Activating your account{% endblock %}
+
+{% block main %}
+  <h1>Activating your account</h1>
+
+  {% if account %}
+	Welcome, {{ account }}. You have successfully activated your account.
+	Now you will need to <a href="/accounts/login/">login</a>.
+  {% else %}
+	Something went wrong activating your account! Check for typos in the address we e-mailed you. If {{ expiration_days }} days have already passed, you'll need to <a href="/accounts/register/">register a new account.</a>
+  {% endif %}
+{% endblock %}

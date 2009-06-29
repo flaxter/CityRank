@@ -1,0 +1,118 @@
+{% extends "base_aggregation.html" %}
+{% block indicators_active %} class="active" {% endblock %}
+
+{% block header_scripts %}
+	{% include "includes/tabs.html" %} 
+	{% include "includes/gmaps.html" %}
+	{{ block.super }}
+{% endblock %}
+
+{% block vizinit %}
+
+	google.load('visualization', '1', {'packages':['table', 'map', 'linechart']});
+	google.setOnLoadCallback(drawView);
+
+	var map;
+
+	function drawView() {
+		var raw_data = {{ json_table|safe }};
+
+		/* table */
+		var columnDefs = raw_data.columns;
+		var dataSource = new YAHOO.util.DataSource(raw_data);
+		var rankFields = raw_data.columns; 
+		dataSource.responseSchema = { resultsList: "Result", fields: rankFields };
+
+		var table = new YAHOO.widget.DataTable("table_div_rank", columnDefs, dataSource);
+
+		/* map */
+		var data = new google.visualization.DataTable({{ json_map|safe }}, 0.5);
+		var options = {'showTip': true, 'mapType': 'normal'};
+
+		var map = document.getElementById('map');
+		var mapviz = new google.visualization.Map(map);
+		mapviz.draw(data, options);
+
+		/* graph */
+/*		var json_graph_data = new google.visualization.DataTable({{ json_graph_table|safe }}, 0.5);
+		var chart = new google.visualization.LineChart(document.getElementById('scatter'))
+		chart.draw(json_graph_data, {width: 700, height: 550, title: 'Top 25', titleX: 'Item (1st on left)', titleY: 'Ranking Score', legend: 'none', pointSize: 3, reverseAxis: true});*/
+		
+		drawGmap();
+
+		var myTabs = new YAHOO.widget.TabView("tabs");
+	}
+	function drawGmap() {
+		if (GBrowserIsCompatible()) {
+			var map = new GMap2(document.getElementById("map"));
+			map.setCenter(new GLatLng(20, 0), 2);
+			map.setUIToDefault();
+
+			var blueIcon = new GIcon(G_DEFAULT_ICON);
+			var large = new GSize(10,17);
+			var small = new GSize(20,34);
+	    
+			{% for item, rank, rankMax, value in item_data %}
+			{
+				blueIcon.image = "{{ MEDIA_URL }}map/icons/iconb{{ rankMax }}.png";
+				
+				{% comment %}
+				{% ifequal rankMax 26 %}
+					blueIcon.iconSize = large;
+				{% else %}
+					blueIcon.iconSize = small;
+				{% endifequal %} {% endcomment %}
+
+				markerOptions = { icon: blueIcon };
+
+				var html{{item.id}};
+				point = new GLatLng({{ item.lat }}, {{ item.long }});
+				
+				marker = new GMarker(point, markerOptions);
+				map.addOverlay(marker);
+
+				GEvent.addListener(marker, "click", function() {
+					title = "<b><a href=\"/items/{{ item.name|urlencode }}\">{{ item.name }}</a> ranks {{ rank }} ({{ value }})</b><br/>";
+					map.openInfoWindowHtml(new GLatLng({{ item.lat }}, {{ item.long }}), title);
+				} );
+			}
+			{% endfor %}
+		}
+	}
+
+	{{ block.super }}
+{% endblock %}
+
+{% block title %} {{ block.super }} | {{ datasource.name }} {% endblock %}
+{% load misc %}
+{% block breadcrumbs %} <a href="/indicators/">Indicators</a> {% include "includes/crumb.html" %} {{ datasource.name }} {% endblock %}
+
+{% load icons %}
+
+{% block headingcol3 %}
+<h1>{{ datasource.name }}
+{% if datasource.aggregate %}
+	{% exclude2 datasource.id %}
+{% else %}
+	{% include2 datasource.id %}
+{% endif %}</h1>
+{% endblock %}
+
+{% block main %}
+<div class="yui-skin-sam">
+	<div id="tabs" class="yui-navset">
+		<ul class="yui-nav">
+			<li class="selected first"><a href="#tab1"><em>Overview</em></a></li>
+			<li><a href="#tab2"><em>Data</em></a></li>
+<!--			<li><a href="#tab3"><em>Graph</em></a></li> -->
+			<li class="last"><a href="#tab4"><em>Map</em></a></li>
+		</ul>            
+		<div class="yui-content">
+			<div><p>Source: <a href="{{ datasource.source }}">{{ datasource.source }}</a></p><p>{{ datasource.description|safe }}</p></div>
+			<div><div id="table_div_rank"></div></div>
+<!--			<div id="scatter" style="width: 700px; height: 550px;"></div> -->
+			<div id="map" style="width: 800px; height: 550px;"></div>
+		</div>
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block bugs %} {% endblock %}
+{% block content %}
+
+<!-- begin: main content area #main -->
+<div id="main">
+  <div class="page_margins">
+    <div class="page">
+
+      <!-- begin: #col1 - first float column -->
+      <div id="col1">
+        <div id="col1_content" class="clearfix">        
+          <div class="box100">
+		    <div class="heading1">{% block headingcol1 %} {% endblock %}</div>
+		    {% block indicatorlist %} {% endblock %}
+		  </div>
+		  <div class="box200">
+		    {% block rankingtable %} {% endblock %}
+		  </div>
+        </div>
+      </div>
+      <!-- end: #col1 -->
+      <!-- begin: #col3 static column -->
+      <div id="col3">
+        <div id="col3_content" class="clearfix"> <a id="content" name="content"></a>
+          <!-- skiplink anchor: Content -->
+          <div class="box100">
+		    <div id="breadcrumbs">{% block breadcrumbs %} {% endblock %}</div>
+		    <div class="heading1">{% block headingcol3 %} {% endblock %}</div>
+		  </div>
+		  <div class="box200">
+			{% block messages %} 
+				{% if messages %}
+				<ul>
+					{% for message in messages %}
+						<li>{{ message|safe }}</li>
+					{% endfor %}
+				</ul>
+				{% endif %}
+			{% endblock %}
+			{% block main %} {% endblock %}
+		  </div>
+        </div>
+        <div id="ie_clearing">&nbsp;</div>
+        <!-- End: IE Column Clearing -->
+      </div>
+      <!-- end: #col3 -->
+    </div>
+  </div>
+</div>
+<!-- end: #main -->
+
+{% endblock %}

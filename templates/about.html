@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block about_active %} class="active" {% endblock %}
+{% block title %} {{ block.super }} | About {% endblock %}
+
+{% block headingcol3 %}<h1>About</h1>{% endblock %}
+
+{% block main %}
+{% load webdesign %}
+		<p>
+Born out of a collaboration between the <a href="http://www.fondationpourgeneve.ch">Fondation pour Genève</a> and the <a href="http://www.epfl.ch">Swiss Federal Institute of Technology in Lausanne</a>, the idea of building a new ranking of global cities was thought up by Xavier Comtesse and Jeffrey Huang. They realized 
+that no global, comprehensive and unbiased ranking of influential cities currently exists. They set out to create a tool to empower users to create their own rankings and build new city indicators. Seth Flaxman and John Stephenson were added to the team in the Fall of 2008.</p>
+<h2>A Work in Progress</h2>
+<p>
+CityRank.ch is very much a work in progress. We will be adding many new statistics and a few new indicators in the coming weeks. If you
+have data to share, questions, or comments we'd love to hear from you. Please <a href="/contact">contact us</a>!
+</p>
+<h2>The Team</h2>
+<p>
+<strong>Xavier Comtesse</strong> is the head of the <a href="http://www.fondationpourgeneve.ch/fr/observatoire">Observatoire</a> at the <a href="http://www.fondationpourgeneve.ch/">Fondation pour Genève</a>. He has long been reflecting on the implications of new technologies and on ways Geneva can make better use of globalising forces.</p>
+<p>
+<strong><a href="http://people.epfl.ch/jeffrey.huang">Jeffrey Huang</a></strong> examines the possibilities of merging physical and virtual environments to enhance everyday environments and everyday life. He is a Professor of Architecture and Digital Media at the Swiss Federal Institute of Technology Lausanne (EPFL).</p>
+<p>
+<strong><a href="http://people.epfl.ch/seth.flaxman">Seth Flaxman</a></strong> majored in computer science and mathematics at Harvard University. Seth developed the aggregation methodology underlying CityRank.ch and built the website architecture. In the fall of 2009 Seth will begin a PhD in computer science at EPFL. 
+</p>
+<p>
+<strong>John Stephenson</strong> (john.stephenson <em>at</em> graduateinstitute.ch) graduated from the Graduate Institute of International and Development Studies (IHEID) in Geneva. He undertook an extensive review of the global cities literature and provided some of the theoretical arguments to the project.
+</p>
+<p>
+Special thanks to <strong><a href="http://www.chky.ch">Christoph Frei</a></strong> and <strong><a href="http://www.mereo.ch">Conrad Leu</a></strong> for graphic design and implementation.
+</p>
+<p>
+This website was built in <a href="http://www.djangoproject.com/">Django</a> and uses the <a href="http://www.yaml.de">YAML-framework</a>. It is being served by <a href="http://www.apache.org">Apache</a> and <a href="http://www.lighttpd.net">lighttpd</a>.
+</p>
+
+{% endblock %}

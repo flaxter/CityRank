@@ -1,0 +1,47 @@
+{% extends "base_aggregation.html" %}
+{% block gallery_active %} class="active" {% endblock %}
+
+{% block header_scripts %}
+	{% include "includes/tabs.html" %}
+	{{ block.super }}
+{% endblock %}
+
+{% block vizinit %}
+        {{ block.super }}
+        var tabs = new YAHOO.widget.TabView("tabs");
+{% endblock %}
+
+{% block headingcol3 %}<h1>Gallery</h1>{% endblock %}
+
+{% load date_diff %}
+
+{% block main %}
+<div id="gallery" class="yui-skin-sam">
+	<div id="tabs" class="yui-navset">
+		<ul class="yui-nav">
+			<li class="selected first"><a href="#tab1"><em>Latest Weightings</em></a></li>
+			<li><a href="#tab2"><em>Featured Weightings</em></a></li>
+			<li class="last"><a href="#tab3"><em>Top Weightings</em></a></li>
+		</ul>
+		<div class="yui-content"> 
+			<div>
+				<ul>
+				{% for weighting in latest %}
+					<li><a href="/gallery/{{ weighting.id }}"><div class="left-col"><img src="/media/ranking_icons/icon{{ weighting.id }}.png" /></div><div class="right-col"><a href="/gallery/{{ weighting.id }}" class="title">{{ weighting.name }}</a> <em>{{ weighting.created|date_diff }}</em> by <a href="/accounts/profile/{{ weighting.creator.username }}">{{ weighting.creator.username }}</a><br /> {{ weighting.description|truncatewords:40 }} </div></a></li>
+				{% endfor %}
+				</ul>
+			</div>
+			<div>
+				<ul>
+				{% for weighting in featured %}
+					<li><a href="/gallery/{{ weighting.id }}"><div class="left-col"><img src="/media/ranking_icons/icon{{ weighting.id }}.png" /></div><div class="right-col"><a href="/gallery/{{ weighting.id }}" class="title">{{ weighting.name }}</a> <em>{{ weighting.created|date_diff }}</em> by <a href="/accounts/profile/{{ weighting.creator.username }}">{{ weighting.creator.username }}</a><br /> {{ weighting.description|truncatewords:40 }} </div></a></li>
+				{% endfor %}
+				</ul>
+			</div>
+			<div>
+				[coming soon!] <!--This will be based on traffic statistics (number of hits) for the weightings.-->
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

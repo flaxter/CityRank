@@ -1,0 +1,63 @@
+{% extends "base_aggregation.html" %}
+
+{% block items_active %} class="active" {% endblock %}
+
+{% block header_scripts %}
+	{% include "includes/gmaps.html" %}
+
+    <script type="text/javascript">
+
+    //<![CDATA[
+
+    function load() {
+      if (GBrowserIsCompatible()) {
+        var map = new GMap2(document.getElementById("map"));
+	map.setUIToDefault();
+        map.setCenter(new GLatLng({{ item.lat }}, {{ item.long }}), 11);
+
+	var mapControl = new GSmallZoomControl();
+	map.addControl(mapControl);
+
+      }
+    }
+
+    //]]>
+
+    </script>
+
+	{{ block.super }}
+
+{% endblock %}
+
+{% block breadcrumbs %} <a href="/items">Items</a> {% include "includes/crumb.html" %} {{ item.name }} {% endblock %}
+
+{% block headingcol3 %}<h1>{{ item.full }}</h1>{% endblock %}
+
+{% block title %}
+{{ block.super }} | {{ item.full }}
+{% endblock %}
+
+{% block body_tag %}
+	<body onload="load()" onunload="GUnload()">
+{% endblock %}
+
+
+{% block main %}
+	<div class="c50l">
+		<div class="inner-content">
+		<h2>Indicators</h2>
+		{% include "items/item_detail_content.html" %}
+		</div>
+		<div class="inner-content">
+			<div id="map" style="width: 400px; height: 300px;"></div>
+			<div id="wiki">
+				{% if wiki_entry %}
+					{{ wiki_entry.html|safe }}
+					<em>The content in this box is derived from the <a href="{{ wiki_entry.url }}">Wikipedia entry on {{ item.name }}. It is licensed under the <a href="http://en.wikipedia.org/wiki/GNU_Free_Documentation_License">GFDL</a>.</em>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	<div class="c50r">
+	</div>
+{% endblock %}

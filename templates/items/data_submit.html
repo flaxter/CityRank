@@ -1,0 +1,17 @@
+{% extends "base_aggregation.html" %}
+
+{% block stats_active %} class="active" {% endblock %}
+
+{% block title %}
+{{ block.super }} | Submit Data 
+{% endblock %}
+
+{% block headingcol3 %}<h1>Submit Data</h1>{% endblock %}
+
+{% block main %}
+	<form action="/data/submit/" method="POST" enctype="multipart/form-data">
+
+		{{ form.as_p }}
+		<p><label>&nbsp;</label><input type="submit" value="Upload"/></p>
+	</form>
+{% endblock %}

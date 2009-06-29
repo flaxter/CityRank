@@ -1,0 +1,15 @@
+{% extends "base_aggregation.html" %}
+{% block home_active %} class="active" {% endblock %}
+
+{% block headingcol3 %}<h1>{{ user }}'s profile</h1>{% endblock %}
+
+{% block main %}
+{% if weightings %}
+	<h2>Saved Rankings</h2>
+	<ul id="source_list">
+	{% for weighting in weightings %}
+		<li><img src="/media/ranking_icons/icon{{ weighting.id }}.png" /> <a href="/gallery/{{ weighting.id }}">{{ weighting.name }}</a>: {{ weighting.description }} on <em>{{ weighting.created }}</em></li>
+	{% endfor %}
+	</ul>
+{% endif %}
+{% endblock %}

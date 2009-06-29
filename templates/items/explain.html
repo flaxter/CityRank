@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block explain_active %} class="active" {% endblock %}
+
+{% load listutil %}
+
+{% block vizinit %}
+	google.load('visualization', '1', {'packages':['table']});
+	google.setOnLoadCallback(drawView);
+
+	function drawView() {
+		var table = new google.visualization.Table(document.getElementById('table_div_rank'));
+		var json_data = new google.visualization.DataTable({{ json_table|safe }}, 0.5);
+		table.draw(json_data, {showRowNumber: true, allowHtml: true});
+	}
+
+{% endblock %}
+
+{% block headingcol3 %}<h1>How Does It Work?</h1>{% endblock %}
+
+{% block main %}
+<div id="explain">
+<h2>Overview: Rank Aggregation</h2>
+<p class="no-indent">An instance of a rank aggregation problem consists of a set of 
+<strong>items</strong> and a set of <strong>rankings</strong>. 
+A solution to a rank aggregation problem is a single aggregated ranking which is as <strong>"consistent"</strong>
+as possible with each of the original rankings. <!--An example: Alice and Bob are planning a joint birthday party, at which
+two flavors of ice cream will be served. Alice and Bob both rank their top three flavors of ice cream. Alice likes vanilla, followed by
+chocolate, followed by strawberry. Bob likes chocolate, followed by vanilla, followed by peach. One aggregated ranking of these two
+rankings is: vanilla, chocolate, strawberry, peach.--> </p>
+<h2>An Example</h2>
+<p class="no-indent">On <a href="http://www.cityrank.ch">ItemRank.ch</a> our algorithm takes as input set of cities, 
+like New York, Geneva, Chicago, and London and a set of indicators:</p>
+<p>
+	<table>
+	{% for city, row in data %}
+		{% if forloop.first %}
+		<tr class="heading">
+			{% for source in sources %}
+				<td>{{ source.name }}</td>
+			{% endfor %}
+		</tr>
+		{% endif %}
+		<tr class="{% cycle 'even' 'odd' %}">
+			{% for col in row %}
+				{% if col %}
+					<td>
+						{{ col.city.name }} {{ col.value }} <!-- ({{ col.value }}) -->
+					</td>
+				{% endif %}
+			{% endfor %}
+		</tr>
+	{% endfor %}
+	</table>
+</p>
+<p class="no-indent">With this data as input, the algorithm produces an overall, aggregated ranking:</p>
+<p>
+	<table>
+	{% for city, row in data %}
+		{% if forloop.first %}
+		<tr class="heading">
+			<td>Item</td>
+		</tr>
+		{% endif %}
+		<tr class="{% cycle 'even' 'odd' %}">
+			<td>{{ city.1 }} {{ city.0|floatformat }}</td>
+		</tr>
+	{% endfor %}
+	</table>
+</p>
+<h2>Voting Algorithms</h2>
+<p>
+Rank aggregation is a version of voting in which the set of items to be ranked are the candidates
+and each voter expresses his or her preferences by creating a ranking.
+The objective is to pick either a single winner (in the case of a single
+open position) or a set of winners, usually ranked.
+This set of winners can be taken to be the aggregated ranking.
+There is a vast literature on voting algorithms known as social choice
+theory.
+</p>
+<p><h2>Scaled Data</h2>
+	<table>
+	{% for city, row in data %}
+		{% if forloop.first %}
+		<tr class="heading">
+			{% for source in sources %}
+				<td>{{ source.name }}</td>
+			{% endfor %}
+		</tr>
+		{% endif %}
+		<tr class="{% cycle 'even' 'odd' %}">
+			{% for col in row %}
+				{% if col %}
+					<td>
+						{{ col.city.name }} {{ col.scaled_value|floatformat }} <!-- ({{ col.value }}) -->
+					</td>
+				{% endif %}
+			{% endfor %}
+		</tr>
+	{% endfor %}
+	</table>
+</p>
+<p><h2>Pairwise Input Data</h2>
+	<table>
+		<tr class="heading, column" >
+			<td>&nbsp;</td>
+			{% for city in cities %}
+				<td>{{ city.name }}</td>
+			{% endfor %}
+		</tr>
+		{% for city, row in pairwise %}
+			<tr class="{% cycle 'even' 'odd' %}">
+				<td class="heading, row"> {{ city.name }} </td>
+				{% for col, preference in row %}
+					<td class={{ preference }}> {{ col|floatformat }} </td>
+				{% endfor %}
+			</tr>
+		{% endfor %}
+	</table>
+</p>
+<p><h2>Pairwise Output Data</h2>
+	<table>
+		<tr class="heading, column" >
+			<td>&nbsp;</td>
+			{% for city in cities %}
+				<td>{{ city.name }}</td>
+			{% endfor %}
+		</tr>
+		{% for city, row in pairwise_after %}
+			<tr class="{% cycle 'even' 'odd' %}">
+				<td class="heading, row"> {{ city.name }} </td>
+				{% for col, preference in row %}
+					<td class={{ preference }}> {{ col|floatformat }} </td>
+				{% endfor %}
+			</tr>
+		{% endfor %}
+	</table>
+</p>
+<p>
+<h2>Notes</h2>
+<p>Match cell colors to column or row title to determine preferences, i.e. if row A, column B is blue
+then city A (colored blue) is preferred. If row A, column B is red then city B (colored red) is preferred.
+</p><p>
+<em>More information: the value in row A, column B (where A and B are cities) is
+equal to the arithmetic mean of the score differences of A and B (where
+the score difference is the value of B minus the value of A for each ranking
+in which both appear). A positive value in row A, column B indicates that when all of the rankings are averaged together, city B is preferred to city A.A negative value indicates the opposite.</em> 
+<p>
+<em>To obtain the final, aggregated ranking, the values which gave the pairwise output data are rescaled linearly so that city ranked #1 has a score of 100 and the city ranked last has a score of 0. (A sensible alternative would be to use the scaling from earlier, where city #50 is ranked 50.)</em></p>
+</p>
+</div>
+{% endblock %}

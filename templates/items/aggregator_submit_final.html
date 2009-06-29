@@ -1,0 +1,17 @@
+{% extends "base_aggregation.html" %}
+{% block title %} {{ block.super }} | Submit Your Ranking {% endblock %}
+{% block ranking_active %} class="active" {% endblock %}
+
+{% block breadcrumbs %} <a href="/ranking">My Ranking</a> {% include "includes/crumb.html" %} Submit {% endblock %}
+
+{% block headingcol3 %} <h1>Submit Your Ranking: Complete</h1> {% endblock %}
+
+{% block main %}
+
+Thanks! <a href="/gallery/{{ id }}">Your ranking</a> has been shared. 
+<ul>
+<li><a href="/gallery/{{ id }}">Share it</a> with friends, post it on your blog, etc.</li>
+<li>See other shared rankings in <a href="/gallery/">The Gallery</a></li>
+<li><a href="/accounts/profile">See your shared rankings</a></li>
+</ul>
+{% endblock %}

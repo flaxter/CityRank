@@ -1,0 +1,89 @@
+@charset "UTF-8";
+/**
+ * "Yet Another Multicolumn Layout" - (X)HTML/CSS Framework
+ *
+ * (en) IE-Patch stylesheet for YAML standard layout (3 columns without column dividers)
+ *
+ * @copyright       Copyright 2005-2009, Dirk Jesse
+ * @license         CC-A 2.0 (http://creativecommons.org/licenses/by/2.0/),
+ *                  YAML-C (http://www.yaml.de/en/license/license-conditions.html)
+ * @link            http://www.yaml.de
+ * @package         yaml
+ * @version         3.1
+ * @revision        $Revision: 343 $
+ * @lastmodified    $Date: 2009-01-19 23:41:32 +0100 (Mo, 19. Jan 2009) $
+ */
+
+/* Layout-dependent adjustments --------------------------------------- */
+@media screen, projection
+{
+  /**
+   * Bugfix for IE 3-Pixel-Jog Bug
+   *
+   * @bugfix
+   * @affected   IE 5.x/Win, IE6
+   * @css-for    IE 5.x/Win, IE6
+   * @valid      yes
+   */
+
+  * html #col3 { height: 1%; }
+  * html #col1 {margin-right: -3px;}
+  * html #col2 {margin-left: -3px;}
+  * html #col3 { margin-left: 300px; margin-right: 0;}
+  
+  #col3 #ranking-tool,
+  #main #col3 #ranking-tool .yui-dt-liner,
+  #main #yui-dt0-paginator0,
+  #main #col3 #gallery .yui-content ul li,
+  #col3 #source_list li  {height: 1%;}
+  
+#col3 #source_list li span {padding-left: 8px;}
+#main #col3 #tabs .yui-nav li a {background-position: 100% 12px; margin-left: 0; margin-right: -3px;}
+
+#main #col3 #ranking-tool .item-slider-bg {	background-image: url(../../images/bg_slider_01.gif); background-position: 49% 10px;}
+
+  #main .box100 #indicator-list {
+  	height: 50px;
+	overflow: hidden;
+	border: 1px solid #F60;
+}
+
+ /**
+  * min-width/max-width workaround for IE5.x & IE6
+  *
+  * @workaround
+  * @affected   IE 5.x/Win, IE6
+  * @css-for    IE 5.x/Win, IE6
+  * @valid      no
+  */
+
+  * html div.page_margins {
+    /* Fallback if JavaScript is disabled */
+    width: auto;
+
+    /* JS-Expression for min-/max-width simulation */
+    width: expression((document.documentElement && document.documentElement.clientHeight) ? (((document.documentElement.clientWidth > (80 * 12 * (parseInt(this.parentNode.currentStyle.fontSize) / 100))) ? "80em" : "auto" )) : (((document.body.clientWidth > (80 * 12 * (parseInt(this.parentNode.currentStyle.fontSize) / 100))) ? "80em" : "auto" )));
+  }
+
+  * html #header,
+  * html #nav,
+  * html #main,
+  * html #footer {
+  /* Fallback if JavaScript is disabled */
+  width: auto;
+
+  width: expression((document.documentElement && document.documentElement.clientHeight) ? ((document.documentElement.clientWidth < 953) ? "953px" : "auto") : ((document.body.clientWidth < 953) ? "953px" : "auto")); }
+
+/*  img { behavior: url(http://www.itemrank.ch/media/css/patches/iepngfix.htc) }*/
+* html img,
+* html .png {
+position:relative;
+behavior: expression((this.runtimeStyle.behavior="none")&&(this.pngSet?this.pngSet=true:(this.nodeName == "IMG" && this.src.toLowerCase().indexOf('.png')>-1?(this.runtimeStyle.backgroundImage = "none",
+this.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + this.src + "', sizingMethod='image')",
+this.src = "http://www.itemrank.ch/media/images/blank.gif"):(this.origBg = this.origBg? this.origBg :this.currentStyle.backgroundImage.toString().replace('url("','').replace('")',''),
+this.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + this.origBg + "', sizingMethod='crop')",
+this.runtimeStyle.backgroundImage = "none")),this.pngSet=true)
+);
+}
+#block2 #twitter_div #twitter-link {background-image: url(../../images/icon_twitter_01.gif);}
+}

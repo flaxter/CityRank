@@ -1,0 +1,78 @@
+<script type="text/javascript">
+	var map, geocoder, lat, long;
+	function drawGmap() {
+		map = new GMap2(document.getElementById("map"));
+		map.setCenter(new GLatLng(34, 0), 1);
+		geocoder = new GClientGeocoder();
+	}
+	function lookup_address() {
+		lookup($("#address_field").val());
+		return false;
+	}
+	function add_item() {
+		item = $("#id_item").val();
+		country = $("#id_country").val();
+		var request = "/add_item/submit/?"; 
+		request += "lat=" + lat;
+		request += "&long=" + long;
+		request += "&item=" + item;
+		request += "&country=" + country;
+
+		GDownloadUrl(request, function(data, responseCode) {
+			$("#item_form").html(data);
+		} );
+		return false;
+	}
+
+	    function addAddressToMap(response) {
+	      map.clearOverlays();
+	      if (!response || response.Status.code != 200) {
+		alert("Sorry, we were unable to geocode that address");
+	      } else {
+		place = response.Placemark[0];
+		lat = place.Point.coordinates[1];
+		long = place.Point.coordinates[0];
+		point = new GLatLng(lat, long);
+		marker = new GMarker(point);
+		map.addOverlay(marker);
+		map.setCenter(point, 7);
+
+		$("#json").html("<p>Does this look right? If not, try refining your search by including a state, province, or country.</p><p>" + YAHOO.lang.JSON.stringify(place.AddressDetails, ',') + "</p>");
+		var name = '';
+		if(place.AddressDetails.Country) {
+			if(place.AddressDetails.Country.AdministrativeArea) {
+				if(place.AddressDetails.Country.SubAdministrativeArea && place.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality)
+					name = place.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.LocalityName;
+				else if(place.AddressDetails.Country.AdministrativeArea.Locality)
+					name = place.AddressDetails.Country.AdministrativeArea.Locality.LocalityName;
+			}
+			else
+				name = '';
+		}
+		else {
+			name = place.address.split (',')[0];
+		}
+
+		var request = "/search/?"; 
+		request += "lat=" + lat;
+		request += "&long=" + long;
+		if(name)
+			request += "&item=" + name;
+		if(place.AddressDetails.Country)
+			request += "&tld=" + place.AddressDetails.Country.CountryNameCode;
+/*		$("#debug").html(request + "<p>" + YAHOO.lang.JSON.stringify(place.AddressDetails, ','));*/
+
+		GDownloadUrl(request, function(data, responseCode) {
+			$("#item_form").html('<strong>' + place.address + '</strong>' + data);
+		} );
+
+	      }
+	    }
+
+	function lookup(address)  {
+		drawGmap();
+		geocoder.getLocations(address, addAddressToMap);
+		return false;
+	}
+
+</script>

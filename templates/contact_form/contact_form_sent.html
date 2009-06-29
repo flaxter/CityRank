@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block contact_active %} class="active" {% endblock %}
+{% block title %} {{ block.super }} | Contact Us{% endblock %}
+{% block content_title %}
+<h1>Contact Us</h1>
+{% endblock %}
+{% block content %}
+<!-- begin: main content area #main -->
+<div id="main" class="hidecol1">
+  <div class="page_margins">
+    <div class="page">
+	  {% block bugs %} <div id="bugs"><a href="/bugs">Report a bug!</a></div> {% endblock %}
+
+      <!-- begin: #col3 static column -->
+      <div id="col3">
+        <div id="col3_content" class="clearfix"> <a id="content" name="content"></a>
+          <!-- skiplink anchor: Content -->
+			
+		Your message has been sent!	
+			
+			
+        </div>
+        <div id="ie_clearing">&nbsp;</div>
+        <!-- End: IE Column Clearing -->
+      </div>
+      <!-- end: #col3 -->
+
+	  <div id="breadcrumbs">{% block breadcrumbs %} {% endblock %}</div>
+    </div>
+  </div>
+</div>
+<!-- end: #main -->
+{% endblock %}

@@ -1,0 +1,15 @@
+{% load misc %}
+
+{% block main %} 
+<p>
+<form onSubmit="return lookup_address()">
+<input type=text name=address id="address_field">
+<input type=submit value="lookup">
+</form>
+</p>
+<div id="json"></div>
+<div id="debug"></div>
+<div id="city_form" style="width: 200px; float: left;clear:none;"></div>
+<div id="map" style="width:300px;height:300px; float:right;"></div>
+{% endblock %}
+

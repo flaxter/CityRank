@@ -1,0 +1,66 @@
+@charset "UTF-8";
+/**
+ * "Yet Another Multicolumn Layout" - (X)HTML/CSS Framework
+ *
+ * (en) print stylesheet
+ *
+ * @copyright       Copyright 2005-2009, Dirk Jesse
+ * @license         CC-A 2.0 (http://creativecommons.org/licenses/by/2.0/),
+ *                  YAML-C (http://www.yaml.de/en/license/license-conditions.html)
+ * @link            http://www.yaml.de
+ * @package         yaml
+ * @version         3.1
+ * @revision        $Revision: 302 $
+ * @lastmodified    $Date: 2008-12-14 11:23:55 +0100 (So, 14. Dez 2008) $
+ */
+
+/* import print base styles */
+@import url(../../yaml/core/print_base.css);
+
+@media print
+{
+  #user,
+  #nav_main,
+  #bugs,
+  #breadcrumbs {display:none !important; }
+  
+  #logo img.print { height: 120px; width: 155px;}
+    
+  #main {padding-top: 20px; padding-bottom: 20px;}
+  
+  #footer {border-top: 1px solid #C8C8C8;}
+  #footer .page { padding-top: 10px}
+	
+  #col1_content { padding-left: 0;}
+  #col3_content { margin-right: 0; padding-right: 0; padding-left: 10px;}
+  
+  #main.hidecol1 #col3 {margin-left: 0; padding-left: 0;}
+  #main.hidecol1 #col3_content {width: 100%; margin-left: 0; padding-left: 0;}  
+  
+  #main h1 span, #main h2 span, #main h3 span {border: none !important; padding-left: 0;}
+  
+  #main #col3 h1 {font-size: 200%;}
+  #main h1 { font-size: 190%; font-weight:bold;}
+  #main h2 { font-size: 150%;font-weight:bold;}
+  #main h3 { font-size: 133.33%; font-weight:bold;}
+  #main h4 { font-size: 116.67%; font-weight:bold;}
+  #main h5 { font-size: 116.67%; font-weight:bold;}
+  
+  #main h1.style1 .content-wrapper {padding-left: 0;}
+  
+  #main #col3 #tabs .yui-nav li a { border-top: none;}
+  #main #col3 #tabs .yui-nav li.first a {padding-left: 0;}
+  
+  /* (en) optional output of acronyms and abbreviations*/
+ abbr[title]:after, acronym[title]:after { content: '(' attr(title) ')'; }
+ 
+#explain {display: inline; float: left;}
+
+  /* (en) optional URL output of hyperlinks in print layout */
+  /*a[href]:after {
+    content:" <URL: "attr(href)">";
+    color:#444;
+    background:inherit;
+    font-style:italic;
+  }*/
+}

@@ -1,0 +1,12 @@
+{% extends "base_2cols.html" %}
+
+{% block headingcol3 %}<h1>Report a Bug</h1>{% endblock %}
+
+{% block main %}
+	<form method=POST action="/bugs/submit/">
+		{{ form.as_p }}
+		<p><label>&nbsp;</label><input type="submit" value="Submit" /></p>
+	</form>
+
+<!-- foobar: {{ foobar }}-->
+{% endblock %}

@@ -1,0 +1,174 @@
+@charset "UTF-8";
+/**
+ * "Yet Another Multicolumn Layout" - (X)HTML/CSS Framework
+ *
+ * (en) Screen layout for YAML examples
+ *
+ * @copyright       Copyright 2005-2009, Dirk Jesse
+ * @license         CC-A 2.0 (http://creativecommons.org/licenses/by/2.0/),
+ *                  YAML-C (http://www.yaml.de/en/license/license-conditions.html)
+ * @link            http://www.yaml.de
+ * @package         yaml
+ * @version         3.1
+ * @revision        $Revision: 343 $
+ * @lastmodified    $Date: 2009-01-19 23:41:32 +0100 (Mo, 19. Jan 2009) $
+ */
+
+@media screen, projection
+{
+  /* (en) Marginal areas & page background */
+  body { background: #F6F6F6;}
+
+  /* (en) Centering layout in old IE-versions */
+  body { text-align: center; width: auto;}
+  .page_margins { text-align:left; margin: 0 auto 0 0;}
+
+  /* (en) Layout: width, background, borders */
+  #header, #nav, #main, #footer { overflow:hidden; min-width: 950px;}
+
+/*HEADER*/
+  #header {color: #333;height: 150px; background: #FFF url("../../images/bg_header_01.png") no-repeat 0 0;}
+
+  #header .page { position:relative; padding: 14px 0 0 30px; }
+  #logo {float: left;}
+  #user {float: right; padding-right: 10px;}
+/*   #user input[type=text],
+  #user input[type=password],*/
+  #user .input-text,
+  #user .input-password {
+	border: none;
+	background-color: #EDEDED;
+	padding: 2px 5px;
+	margin: 0 5px 0 0;
+}
+  /*#user input[type=submit],*/
+  #user .logout,
+  #user .login {
+	border: none;
+	background-color: #FFF;
+	padding: 2px 0;
+	margin: 0;
+	color: #ED1E79;
+	font-size: 18px;
+	text-decoration: none;
+}
+  #user a {display: block;	text-align: right;}
+  #user .welcome a {text-align: left;display: inline;}
+
+  #topnav { color: #88A; background: transparent; }
+
+  #nav_main {
+  	position: absolute;
+	top: 116px;
+	left: 214px;
+	height: 20px;
+	width: 738px;
+	list-style: none;
+	margin: 0;
+}
+#nav_main li {
+	list-style: none;
+	margin: 0;
+	padding: 0 4px 0 0;
+	overflow: auto;
+	display: inline;
+}
+#nav_main li a {
+	letter-spacing: -0.05em;
+	line-height: 20px;
+	font-size: 18px;
+	padding: 0 14px 0 0;
+	color: #00C1B7;
+	background: transparent url(../../images/bg_main_nav_a_01.png) no-repeat 100% 4px;
+	text-decoration: none;
+}
+#nav_main li a.active,
+#nav_main li strong a {
+	font-size: 20px;
+	font-weight: normal;
+	background-position: 100% 6px;
+	color: #000;
+}
+#nav_main li a:hover,
+#nav_main li a:active {text-decoration: none;color: #000;}
+#nav_main li.first a {padding-left: 0;}
+#nav_main li.last a {padding-right: 0;	background: none;}
+
+
+ #header h1 {
+    font-weight:bold;
+    font-size:2.5em;
+    letter-spacing:-2px;
+    line-height:65%;
+    color:#fff;
+  }
+  #header span { color:#88c; }
+
+  #topnav a { color: #ccc; font-weight: normal; background:transparent; text-decoration:none; }
+  #topnav a:focus,
+  #topnav a:hover,
+  #topnav a:active { text-decoration:underline; background-color: transparent; }
+
+/*MAIN*/
+  #main { background: #F6F6F6 url(../../images/bg_main_01.png) no-repeat 0 0; padding: 15px /*60px FORGIVE ME ...but I had to make an executive decision on this one because I tested it with a few users and with 60px too much of each page isn't visible without scrolling! --srf */ 0 20px 0; min-width: 950px;}
+  
+  body,
+  #main,
+  #main .page_margins,
+  #main .page {	width: auto;overflow: visible;}
+
+#bugs {position: absolute;top: 160px;right: 30px;}
+#bugs a {color: red;font-weight: bold;}
+
+#breadcrumbs {font-size: 12px;}
+#breadcrumbs span {	color: #00C1B7;	padding: 0 2px;	font-size: 14px;}
+
+  /*FOOTER*/
+  #footer {
+    color:#666;
+    background: transparent;
+	line-height: 1.5em;
+    border-top: 1px solid #C8C8C8;
+  }
+
+  #footer .page { padding: 10px 20px;}
+
+  #footer a { color: #999; background:transparent; font-weight: bold; }
+  #footer a:focus,
+  #footer a:hover,
+  #footer a:active {color: #000; background-color: transparent; text-decoration:none; }
+  
+  #footer .copyright {display: inline;padding-right: 20px;}
+  
+  /*servicenavigation*/
+  #footer #nav_service,
+  #footer #nav_service li {list-style: none;margin: 0;padding: 0; display: inline;}  
+  #footer #nav_service li a {padding: 0 5px; border-right: 1px solid #C8C8C8; text-decoration: none;}
+  #footer #nav_service li.first a {padding-left: 0}
+  #footer #nav_service li.last a {border: none;}
+  
+ /*COLUMNS*/
+  #col1 { width: 300px; }
+  #col1_content { padding: 0 30px 20px 30px; }
+  
+  #col3 { margin: 0 0 0 300px;}
+  #col3_content { padding: 0 0 20px 0; min-width: 650px;}
+  
+  /*1COL LAYOUT*/
+  #main.hidecol1 #col3 {margin-left: 30px;}
+  #main.hidecol1 #col3_content {min-width: 920px;}
+  
+  #main.hidecol1 #col1,
+  #main.hidecol1 #col1_content {display: none; visibility: hidden;}
+  
+  /*CONTENT BOXES*/
+  #main .box100 {display: block; height: 92px; overflow: hidden;}
+  #main .box100 #breadcrumbs {height: 14px;}
+  
+  #main #col3 .box100 {display: block; height: auto; min-height: 92px; overflow: visible;}
+  
+  .hidecol1 #col3 .box100 {height: auto;}
+  .hidecol1 #col3 .box100 .breadcrumbs {height: 0; display: none;}
+
+  #main #col1 .box200 {position: relative;}
+}

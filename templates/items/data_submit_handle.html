@@ -1,0 +1,94 @@
+{% extends "base_2cols.html" %}
+
+{% block title %}
+{{ block.super }} | Submit Statistics (Step 2)
+{% endblock %}
+
+{% block header_scripts %}
+<!-- Combo-handled YUI CSS files: --> 
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.7.0/build/container/assets/skins/sam/container.css"> 
+<!-- Combo-handled YUI JS files: --> 
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.7.0/build/yahoo-dom-event/yahoo-dom-event.js&2.7.0/build/dragdrop/dragdrop-min.js&2.7.0/build/container/container-min.js"></script> 
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.7.0/build/yahoo/yahoo-min.js&2.7.0/build/event/event-min.js&2.7.0/build/connection/connection-min.js"></script> 
+<script src="http://yui.yahooapis.com/2.7.0/build/json/json-min.js"></script> <!-- is this necessary? -->
+
+        {% include "includes/gmaps.html" %}
+        {% include "includes/add_item_funcs.html" %}
+
+<script type="text/javascript">
+	$(document).ready( function(){ 
+		panel = new YAHOO.widget.Panel("panel2", { width:"800px", height:"600px", visible:false, draggable:false, fixedcenter: true } );
+		panel.setHeader("Panel #2 from Script");
+	
+		panel.setFooter("End of Panel #2");
+		panel.render(document.body);
+
+		$('body').addClass("yui-skin-sam");
+		$('.item_selector select').change(function() {
+				if(this.value == -1) {
+					
+					popup = function(o) {
+						panel.setBody(o.responseText);
+						panel.show(panel) 
+					};
+					var callback =
+					{
+					  success: popup,
+					  failure: popup,
+					  argument: [true]
+					}
+
+					YAHOO.util.Connect.asyncRequest('GET', "/add_item_test", callback, null );
+
+				}
+			});
+	});
+</script>
+
+{% endblock %}
+
+{% block breadcrumbs %} 
+	{% if indicator %}
+		<a href="/indicators/">Indicators</a> {% include "includes/crumb.html" %} Submit 
+	{% else %}
+		<a href="/stats/">Stats</a> {% include "includes/crumb.html" %} Submit
+	{% endif %}
+{% endblock %}
+
+{% block headingcol3 %}
+	<h1>Submit (Step 2)</h1>
+{% endblock %}
+
+
+{% block main %}
+	<form method=POST action="/data/submit/final/" id="stats-form">
+	<table>
+	<tr><td>Raw Input</td><td>Matching Item</td>
+		<td>{{ column_label }}</td>
+		{% if indicator %}
+			<td>Rank</td>
+		{% endif %}
+	</tr>
+
+	{% if indicator %}
+		{% for row, field, match, value in table %}
+			{% if match %} <tr class="match">
+			{% else %} <tr class="notmatch"> 
+			{% endif %}
+
+			<td>{{ row.displayName}}</td><td class="item_selector">{{ field }}</td> <td>{{ row.value }} {{ value }}</td> <td>{{ row.rank }} {{ rank }}</td> </tr>
+		{% endfor %}
+	{% else %}
+		{% for row, field, match, value, rank in table %}
+			{% if match %} <tr class="match">
+			{% else %} <tr class="notmatch"> 
+			{% endif %}
+
+			<td>{{ row.displayName}}</td><td class="item_selector">{{ field }}</td> <td>{{ row.value }} {{ value }}</td> </tr>
+		{% endfor %}
+	{% endif %}
+	</table>
+	<input type=submit value="Submit">
+	</form>
+
+{% endblock %}
